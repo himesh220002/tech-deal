@@ -223,7 +223,29 @@ const products = [
         },
         description: "The Samsung T7 is a compact, shock-resistant SSD with blazing speeds and hardware encryption—perfect for creators, gamers, and professionals on the go."
     },
-    
+    {
+    id: "samsung-galaxy-s24-ultra",
+    product_type: "Smartphone",
+    name: "Samsung Galaxy S24 Ultra",
+    price: "₹1,29,999",
+    oldPrice: "₹1,39,999",
+    discount: "7% OFF",
+    availableAt: ["Amazon", "Flipkart", "Samsung Store"],
+    lowestPrice: "₹129999",
+    image: "https://www.designinfo.in/wp-content/uploads/2024/01/Samsung-Galaxy-S24-Ultra-512GB-Titanium-Black-9.webp",
+    specs: {
+        Display: "6.8-inch QHD+ Dynamic AMOLED 2X, 120Hz",
+        Processor: "Snapdragon 8 Gen 3 for Galaxy",
+        RAM: "12GB",
+        Storage: "256GB / 512GB / 1TB",
+        RearCamera: "200MP + 50MP + 12MP + 10MP Quad Camera",
+        FrontCamera: "12MP",
+        Battery: "5000mAh with 45W fast charging",
+        OS: "Android 14 with One UI 6.1",
+        Connectivity: "5G, Wi-Fi 6E, Bluetooth 5.3, USB Type-C",
+    },
+    description: "The Samsung Galaxy S24 Ultra is Samsung’s flagship smartphone featuring a 200MP camera system, Snapdragon 8 Gen 3 performance, an immersive 6.8-inch AMOLED display, and S Pen support—designed for ultimate productivity and creativity."
+},
 
 
 
