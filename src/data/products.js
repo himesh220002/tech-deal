@@ -1,0 +1,236 @@
+const products = [
+    {
+        id: "dell-xps-13-plus",
+        product_type: "Laptop",
+        name: "Dell XPS 13 Plus",
+        price: "₹89,999",
+        oldPrice: "₹92,000",
+        discount: "10% OFF",
+        availableAt: ["Dell Store", "Amazon", "Flipkart"],
+        lowestPrice: "₹87,999",
+        image: "https://i.pcmag.com/imagery/reviews/06Ug0e0tlPFOh5qZAAcpq10-1..v1688849689.jpg",
+        specs: {
+            Processor: "Intel Core i7 13th Gen",
+            RAM: "16GB LPDDR5",
+            Storage: "512GB SSD",
+            Display: "13.4-inch OLED",
+        },
+        description: "The Dell XPS 13 Plus is a 13.4-inch Windows ultrabook released in 2023, designed for professionals and creators who prioritize cutting-edge design and performance. Key features include a borderless InfinityEdge display, Intel’s 12th Gen Core i7 processor, a seamless glass touchpad, and a capacitive touch function row. With a premium aluminum chassis and Thunderbolt 4 connectivity, it delivers a futuristic experience in a compact form factor.",
+
+    },
+    {
+        id: "macbook-air-m3-15",
+        product_type: "Laptop",
+        name: "MacBook Air M3 15-inch",
+        price: "₹1,34,900",
+        oldPrice: "₹1,36,100",
+        discount: "10% OFF",
+        availableAt: ["Apple Store", "Amazon", "Vijay Sales"],
+        lowestPrice: "₹1,28,900",
+        image: "https://imageio.forbes.com/specials-images/imageserve/65edf9344bf5e45e09a32b1b/0x0.jpg?format=jpg&height=900&width=1600&fit=bounds",
+        specs: {
+            Processor: "Apple M3 Chip",
+            RAM: "8GB Unified",
+            Storage: "256GB SSD",
+            Display: "15-inch Liquid Retina",
+        },
+        description: "The MacBook Air M3 is a 15.3-inch fanless laptop launched by Apple in 2025, aimed at students, developers, and mobile professionals. It features Apple’s M3 chip with hardware-accelerated graphics, a vibrant Liquid Retina display, up to 24GB unified memory, and all-day battery life. With MagSafe charging, support for dual external displays, and spatial audio, it blends performance and portability in a sleek aluminum body. ",
+
+    },
+    {
+        id: "lenovo-idea-tab-pro",
+        product_type: "Mobile",
+        name: "Lenovo Idea Tab Pro 12GB 256GB",
+        price: "₹30,999",
+        oldPrice: "₹48,999",
+        discount: "37% OFF",
+        availableAt: ["Amazon", "Croma", "Lenovo Store"],
+        lowestPrice: "₹30,998",
+        image: "https://p3-ofp.static.pub//fes/cms/2025/03/11/1byjvmzo2dwgi566c7o5cn62vd8nwk011088.png",
+        specs: {
+            Processor: "MediaTech Hellios 8300",
+            RAM: "12GB",
+            Storage: "256GB SSD",
+            Display: "12.7inch 3K 144Hz display",
+            Battery: "10200mAH 44W charger",
+            OS: "Android 14, +2 year update"
+        },
+        description: "The Lenovo Idea Tab Pro is a 12.7-inch Android tablet released in 2025, primarily marketed toward students and everyday users. Key features include a high-refresh-rate 3K display, a powerful MediaTek processor, quad JBL speakers, and an included stylus. ",
+    },
+    {
+        id: "sony-wh-1000xm6",
+        product_type: "Audio",
+        name: "Sony WH-1000XM6 Wireless Headphones",
+        price: "₹29,990",
+        oldPrice: "₹34,990",
+        discount: "14% OFF",
+        availableAt: ["Sony Center", "Amazon", "Reliance Digital"],
+        lowestPrice: "₹28,499",
+        image: "https://cdn.headphonecheck.com/wp-content/uploads/Sony-WH-1000XM6-1-1-1920x1080.jpg",
+        specs: {
+            Driver: "40mm HD Hybrid Drivers",
+            NoiseCancellation: "Adaptive ANC with AI",
+            Battery: "40 hours playback",
+            Connectivity: "Bluetooth 5.3, LDAC, AAC, SBC",
+            Controls: "Touch + Voice Assistant",
+        },
+        description: "The Sony WH-1000XM6 is the flagship over-ear headphone for audiophiles and commuters alike. Featuring AI-powered adaptive noise cancellation, LDAC support, and ultra-long battery life, it delivers immersive sound with studio-grade clarity."
+    },
+    {
+        id: "msi-mag-255xf",
+        product_type: "Display",
+        name: "MSI MAG 255XF FHD Gaming Monitor",
+        price: "₹15,999",
+        oldPrice: "₹18,499",
+        discount: "14% OFF",
+        availableAt: ["MSI Store", "Amazon", "MD Computers"],
+        lowestPrice: "₹15,499",
+        image: "https://modxcomputerscomca8ca.zapwp.com/q:i/r:0/wp:1/w:480/u:https://modxcomputers.com/wp-content/uploads/2025/03/1024-5.png", // Replace with actual 255XF image if available
+        specs: {
+            Resolution: "1920 x 1080 (Full HD)",
+            Panel: "Rapid IPS with HDR Ready",
+            RefreshRate: "48Hz – 300Hz",
+            ResponseTime: "0.5ms (GtG)",
+            Ports: "2x HDMI 2.0b, 1x DisplayPort 1.4a, Headphone-out",
+            ColorAccuracy: "120% sRGB, 87% Adobe RGB",
+        },
+        description: "The MSI MAG 255XF is a 24.5-inch gaming monitor built for speed and precision. Featuring a 300Hz refresh rate, ultra-fast 0.5ms response time, and HDR-ready Rapid IPS panel, it delivers buttery-smooth visuals for competitive gamers. With wide color coverage and anti-glare coating, it's equally suited for immersive play and creative work."
+    },
+    {
+        id: "logitech-g502-hero",
+        product_type: "Peripheral",
+        name: "Logitech G502 HERO High Performance Gaming Mouse",
+        price: "₹3,995",
+        oldPrice: "₹5,495",
+        discount: "27% OFF",
+        availableAt: ["Amazon", "Flipkart", "Logitech Store"],
+        lowestPrice: "₹3,899",
+        image: "https://www.simplygaming.in/cdn/shop/files/Logitech_G502_HERO_RGB_Gaming_Mouse_in_Black_with_HERO_25K_sensor_and_customizable_RGB_lighting..png?v=1734337616",
+        specs: {
+            Sensor: "HERO 25K Optical Sensor",
+            DPI: "100 – 25,600",
+            Buttons: "11 Programmable",
+            Connectivity: "Wired USB",
+            Weight: "Adjustable (up to 18g)",
+            RGB: "LIGHTSYNC RGB",
+            Memory: "Onboard profiles (up to 5)",
+            ScrollWheel: "Dual-mode (hyper-fast + precision)",
+            Compatibility: "Windows, macOS",
+        },
+        description: "The Logitech G502 HERO is a wired gaming mouse engineered for precision and customization. Featuring the HERO 25K sensor, 11 programmable buttons, adjustable weights, and LIGHTSYNC RGB, it’s a top-tier choice for competitive gamers and power users. Save profiles onboard and tune DPI on-the-fly for ultimate control."
+    },
+    {
+        id: "logitech-g213-prodigy",
+        product_type: "Peripheral",
+        name: "Logitech G213 Prodigy RGB Gaming Keyboard",
+        price: "₹4,495",
+        oldPrice: "₹5,295",
+        discount: "15% OFF",
+        availableAt: ["Amazon", "Flipkart", "Logitech Store"],
+        lowestPrice: "₹4,399",
+        image: "https://varietyinfotech.com/wp-content/uploads/61Nt8geXzWL._SL1500_.jpg",
+        specs: {
+            SwitchType: "Mech-Dome (Membrane)",
+            Backlight: "LIGHTSYNC RGB (5 zones)",
+            SpillResistance: "Tested up to 60ml",
+            MediaControls: "Dedicated volume, play/pause, skip",
+            PalmRest: "Integrated",
+            Connectivity: "Wired USB 2.0",
+            KeyRollover: "Anti-ghosting (multi-key input)",
+            SoftwareSupport: "Logitech G HUB",
+            Dimensions: "452 x 218 x 33 mm",
+            Weight: "1000g",
+        },
+        description: "The Logitech G213 Prodigy is a full-size RGB gaming keyboard designed for comfort and performance. Featuring Mech-Dome keys tuned for tactile feedback, dedicated media controls, and LIGHTSYNC RGB zones, it’s built to handle intense gaming and everyday spills. The integrated palm rest and adjustable feet ensure long-session comfort, while G HUB software unlocks full customization."
+    },
+    {
+        id: "wd-blue-sn5100-1tb",
+        product_type: "Storagetype",
+        name: "WD Blue SN5100 1TB NVMe SSD",
+        price: "₹6,999",
+        oldPrice: "₹9,999",
+        discount: "30% OFF",
+        availableAt: ["Amazon", "Flipkart", "MD Computers"],
+        lowestPrice: "₹6500",
+        image: "https://www.pcgamesn.com/wp-content/sites/pcgamesn/2025/08/wd-blue-sn5100-ssd.jpg",
+        specs: {
+            Interface: "PCIe Gen4 x4 NVMe",
+            ReadSpeed: "7100MB/s",
+            WriteSpeed: "6700MB/s",
+            FormFactor: "M.2 2280",
+            Endurance: "600TBW",
+        },
+        description: "The WD Blue SN5100 is a blazing-fast PCIe Gen4 SSD designed for gamers and creators. With read speeds up to 7100MB/s, it rivals flagship drives at a fraction of the price."
+    },
+    {
+        id: "corsair-vengeance-ddr5-sodimm-16gb",
+        product_type: "Memory",
+        name: "Corsair Vengeance SODIMM DDR5 16GB",
+        price: "₹5,999",
+        oldPrice: "₹15,000",
+        discount: "60% OFF",
+        availableAt: ["Amazon", "Flipkart", "Corsair Store"],
+        lowestPrice: "₹5,799",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqpOFofCZKmN8ugkSDz41E1pZvIN3xMQ4gBA&s",
+        specs: {
+            Capacity: "16GB (1x16GB)",
+            Type: "DDR5 SODIMM",
+            Speed: "4800MHz (PC5-38400)",
+            CASLatency: "CL40",
+            Voltage: "1.1V",
+            Compatibility: "Intel & AMD laptops, SFF PCs",
+            Features: "XMP 3.0 support, plug-and-play install",
+            Cooling: "Standard aluminum heatspreader",
+            FormFactor: "SODIMM 262-pin",
+        },
+        description: "Corsair Vengeance DDR5 SODIMM 16GB is a high-speed memory module designed for next-gen laptops and compact PCs. With 4800MHz frequency, CL40 latency, and XMP 3.0 support, it delivers faster load times, smoother multitasking, and improved responsiveness. Easy to install and widely compatible, it’s a smart upgrade for gamers, creators, and power users."
+    },
+    {
+        id: "corsair-vengeance-ddr5-5600",
+        product_type: "Memory",
+        name: "Corsair Vengeance DDR5 16GB 5600MHz",
+        price: "₹5,299",
+        oldPrice: "₹8,775",
+        discount: "40% OFF",
+        availableAt: ["Amazon", "Flipkart", "Corsair Store"],
+        lowestPrice: "₹5000",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEP8lJncmLFjCCYuTVT5-oduks42rW6BlVtg&s",
+        specs: {
+            Speed: "5600MHz",
+            CASLatency: "CL40",
+            Voltage: "1.25V",
+            FormFactor: "UDIMM",
+            Compatibility: "Intel & AMD DDR5 platforms",
+        },
+        description: "Corsair’s Vengeance DDR5 delivers next-gen speed and stability for multitasking, gaming, and content creation. Ideal for high-performance builds."
+    },
+    {
+        id: "samsung-t7-500gb",
+        product_type: "Storage",
+        name: "Samsung T7 Portable SSD 500GB",
+        price: "₹12,999",
+        oldPrice: "₹16,999",
+        discount: "24% OFF",
+        availableAt: ["Amazon", "Vlebazaar", "Samsung Store"],
+        lowestPrice: "₹12999",
+        image: "https://m.media-amazon.com/images/I/81rZdT4FlJL.jpg",
+        specs: {
+            Interface: "USB 3.2 Gen2",
+            ReadSpeed: "1050MB/s",
+            WriteSpeed: "1000MB/s",
+            Encryption: "AES 256-bit",
+            Compatibility: "Windows, macOS, Android, PS5",
+        },
+        description: "The Samsung T7 is a compact, shock-resistant SSD with blazing speeds and hardware encryption—perfect for creators, gamers, and professionals on the go."
+    },
+    
+
+
+
+
+
+
+
+];
+
+export default products;
