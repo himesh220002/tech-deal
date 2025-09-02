@@ -33,34 +33,14 @@ export default function ProductDetail({ product }) {
     return (
         <section className="px-10 py-12">
             {/* Back Button */}
-            
-            <button
-                className="mb-6 bg-gray-700 text-center w-32 rounded-2xl h-12 relative text-gray-200 text-xl font-semibold group cursor-pointer"
-                type="button"
+
+            <div class="cursor-pointer w-fit border-4 border-black bg-gray-500 text-white pb-2 transition ease-in-out duration-100 select-none active:pb-0 mb-2 active:mb-4 active:translate-y-2"
                 onClick={() => navigate('/', { state: { scrollTo: 'dashboard' } })}
             >
-                <div
-                    class="bg-gradient-to-b  from-gray-500 and to-gray-900  rounded-xl h-10 w-1/3 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-30 z-10 duration-500"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 1024 1024"
-                        height="25px"
-                        width="25px"
-                    >
-                        <path
-                            d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"
-                            fill="#000000"
-                        ></path>
-                        <path
-                            d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"
-                            fill="#000000"
-                        ></path>
-                    </svg>
+                <div class="bg-gray-800 border-4 border-gray-800  px-2 py-1">
+                    <span class="text-[1.2em] tracking-wide">Back</span>
                 </div>
-                <p class="translate-x-5">Back</p>
-            </button>
-
+            </div>
 
             <div className="grid md:grid-cols-2 gap-10 items-start">
                 {/* Image */}
@@ -118,21 +98,21 @@ export default function ProductDetail({ product }) {
                         //     </div>
                         // </div>
 
-                              
-                    <div class="mt-6">
-                        <h3 className="font-semibold mb-2">Specifications:</h3>
-                       
-                        <div
-                            class="grid grid-cols-3 gap-3  "
-                        >
-                            {Object.entries(product.specs).map(([key, value]) => (
+
+                        <div class="mt-6">
+                            <h3 className="font-semibold mb-2">Specifications:</h3>
+
+                            <div
+                                class="grid grid-cols-3 gap-3  "
+                            >
+                                {Object.entries(product.specs).map(([key, value]) => (
                                     <div key={key} className=" rounded-lg bg-[rgb(41,49,79)] p-5 transition relative duration-300 cursor-pointer hover:translate-y-[5px] hover:shadow-[0_-3px_0px_0px_rgb(244,67,54)]">
                                         <p className="text-sm text-gray-400">{key}</p>
                                         <p className="font-semibold">{value}</p>
                                     </div>
                                 ))}
+                            </div>
                         </div>
-                    </div>
 
 
                     )}

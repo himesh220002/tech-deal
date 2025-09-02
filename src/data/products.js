@@ -225,7 +225,7 @@ const products = [
     },
     {
     id: "samsung-galaxy-s24-ultra",
-    product_type: "Smartphone",
+    product_type: "Mobile",
     name: "Samsung Galaxy S24 Ultra",
     price: "₹1,29,999",
     oldPrice: "₹1,39,999",
