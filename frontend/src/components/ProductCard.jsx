@@ -21,18 +21,40 @@ export default function ProductCard({ product, likedItems, setLikedItems }) {
 
     }, [product.price, randomNum]);
 
+    const price1 = parseFloat(product.price.replace(/[₹,]/g, ""));
+    const priceold = parseFloat(product.oldPrice.replace(/[₹,]/g, ""));
+
+
+    const discount1 = parseFloat(((priceold - price1) / priceold) * 100).toFixed(1);
 
 
 
     const isHeart = likedItems.includes(product.id);
 
-    const toggleHeart = () => {
+    const toggleHeart = async () => {
+        const email = localStorage.getItem("email");
+        let updatedLikes;
+
         if (isHeart) {
-            setLikedItems(likedItems.filter((id) => id !== product.id));
+            updatedLikes = likedItems.filter((id) => id !== product.id);
         } else {
-            setLikedItems([...likedItems, product.id]);
+            updatedLikes = [...likedItems, product.id];
+        }
+
+        setLikedItems(updatedLikes);
+
+        // 🔁 Sync with backend
+        try {
+            await fetch("http://localhost:5000/api/auth/update-likes", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, likedItems: updatedLikes }),
+            });
+        } catch (err) {
+            console.error("❌ Failed to update likes:", err);
         }
     };
+
 
     return (
         <div className="bg-[#1e293b] rounded-2xl  shadow relative">
@@ -40,7 +62,7 @@ export default function ProductCard({ product, likedItems, setLikedItems }) {
 
                 {/* Discount Badge */}
                 <span className="absolute top-3 left-3 bg-green-100 text-black font-medium text-xs px-2 py-1 rounded-full">
-                    {product.discount}
+                    {discount1}%
                 </span>
 
                 <button className="absolute top-3 right-3 p-2 flex items-center justify-center bg-gray-600 rounded-full cursor-pointer"
@@ -100,23 +122,23 @@ export default function ProductCard({ product, likedItems, setLikedItems }) {
 
                 <button
                     type="submit"
-                    class="relative z-10 flex w-full justify-center items-center gap-2 px-4 py-2 mt-2 text-lg text-gray-50 bg-gray-900 border-2 border-gray-900 rounded-xl shadow-xl backdrop-blur-md overflow-hidden group isolation-auto lg:font-semibold cursor-pointer"
+                    className="relative z-10 flex w-full justify-center items-center gap-2 px-4 py-2 mt-2 text-lg text-gray-50 bg-gray-900 border-2 border-gray-900 rounded-xl shadow-xl backdrop-blur-md overflow-hidden group isolation-auto lg:font-semibold cursor-pointer"
                     onClick={() => navigate(`/product/${product.id}`, { state: { product } })}
                 >
                     View Details
                     <svg
-                        class="w-5 h-5 p-1 rotate-45 text-gray-50 border border-gray-700 bg-gray-300 rounded-full ease-linear duration-300 group-hover:rotate-90 group-hover:bg-gray-50 group-hover:border-none"
+                        className="w-5 h-5 p-1 rotate-45 text-gray-50 border border-gray-700 bg-gray-300 rounded-full ease-linear duration-300 group-hover:rotate-90 group-hover:bg-gray-50 group-hover:border-none"
                         viewBox="0 0 16 19"
                         xmlns="http://www.w3.org/2000/svg"
                     >
                         <path
                             d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z"
-                            class="fill-gray-800 group-hover:fill-gray-800"
+                            className="fill-gray-800 group-hover:fill-gray-800"
                         ></path>
                     </svg>
 
-                    <span class="absolute top-0 left-0 w-full h-full -z-10 overflow-hidden">
-                        <span class="absolute top-0 left-[-100%] w-full h-full bg-purple-900 rounded-full transition-all duration-700 group-hover:left-0 group-hover:scale-150"></span>
+                    <span className="absolute top-0 left-0 w-full h-full -z-10 overflow-hidden">
+                        <span className="absolute top-0 left-[-100%] w-full h-full bg-purple-900 rounded-full transition-all duration-700 group-hover:left-0 group-hover:scale-150"></span>
                     </span>
                 </button>
 

@@ -1,19 +1,29 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ProductDetail from "./ProductDetailsPage";
-import products from "../data/products";
-
+import { getProducts } from "../api/api";
 
 export default function ProductDetailWrapper() {
   const { state } = useLocation();
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const [product, setProduct] = useState(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
 
-  const product = state?.product || products.find((p) => p.id === id);
+    if (state?.product) {
+      // If product was passed via Link state, use it
+      setProduct(state.product);
+    } else {
+      // Otherwise fetch from backend
+      getProducts().then((products) => {
+        const found = products.find((p) => String(p.id) === String(id));
+        setProduct(found);
+      });
+    }
+  }, [id, state]);
 
   if (!product) return <p className="text-center mt-10">Product not found</p>;
 

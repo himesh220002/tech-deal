@@ -127,12 +127,17 @@ export default function ProductDetail({ product }) {
 
                     {/* Available Stores */}
                     <div className="mt-6">
-                        <h3 className="font-semibold mb-2">Available At:</h3>
+                        <div className="flex gap-10 items-start">
+                       <div> <h3 className="font-semibold mb-2">Available At:</h3>
                         <ul className="list-disc pl-6 text-gray-300">
                             {product.availableAt.map((store) => (
                                 <li key={store}>{store}</li>
                             ))}
                         </ul>
+                        </div>
+                        <div className="rounded px-3 py-2 shadow-md bg-gray-700 hover:bg-gray-800"><a href={product.product_link} target="_blank">Buy Product</a></div>
+                        </div>
+                        
                     </div>
 
                     {/* Discount Calculator */}

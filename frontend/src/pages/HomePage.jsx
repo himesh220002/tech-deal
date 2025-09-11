@@ -1,16 +1,25 @@
 import { useState, useEffect, useRef } from "react";
 import HeroSection from "../components/HeroSection";
 import Stats from "../components/Stats";
-import products from "../data/products";
+import { getProducts } from "../api/api";
 import ProductCard from "../components/ProductCard";
+import { useNavigate } from "react-router-dom";
+
 // import "./../styles/newstyle.css"
 
 export default function HomePage({ likedItems, setLikedItems }) {
+
+  const [products, setProducts] = useState([]);
   const [activeCategory, setActiveCategory] = useState("All Products");
   const [searchTerm, setSearchTerm] = useState("");
   const [visibleCount, setVisibleCount] = useState(6); // show 2 rows initially
 
+  
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    getProducts().then(setProducts);
+  }, []);
 
   const categoryMap = {
     Smartphones: "Mobile",
@@ -33,7 +42,9 @@ export default function HomePage({ likedItems, setLikedItems }) {
 
   const dashboardRef = useRef(null);
 
- 
+  
+
+
 
   return (
     <>
@@ -64,20 +75,20 @@ export default function HomePage({ likedItems, setLikedItems }) {
 
         {visibleCount < filteredProducts.length && (
           <div className="mt-8 text-center">
-            
-            <div class="flex items-center justify-center">
-              <div class="relative group">
+
+            <div className="flex items-center justify-center">
+              <div className="relative group">
                 <button
-                  class="relative inline-block p-px font-semibold leading-6 text-white bg-gray-800 shadow-2xl cursor-pointer rounded-xl shadow-zinc-900 transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95"
+                  className="relative inline-block p-px font-semibold leading-6 text-white bg-gray-800 shadow-2xl cursor-pointer rounded-xl shadow-zinc-900 transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95"
                   onClick={() => setVisibleCount((prev) => prev + 3)}
                 >
                   <span
-                    class="absolute inset-0 rounded-xl bg-gradient-to-r from-teal-400 via-blue-500 to-purple-500 p-[2px] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-teal-400 via-blue-500 to-purple-500 p-[2px] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                   ></span>
 
-                  <span class="relative z-10 block px-6 py-3 rounded-xl bg-gray-950">
-                    <div class="relative z-10 flex items-center space-x-2">
-                      <span class="transition-all duration-500 group-hover:translate-x-1">Load More</span>
+                  <span className="relative z-10 block px-6 py-3 rounded-xl bg-gray-950">
+                    <div className="relative z-10 flex items-center space-x-2">
+                      <span className="transition-all duration-500 group-hover:translate-x-1">Load More</span>
 
                     </div>
                   </span>
@@ -88,6 +99,7 @@ export default function HomePage({ likedItems, setLikedItems }) {
           </div>
 
         )}
+        
       </section>
 
     </>

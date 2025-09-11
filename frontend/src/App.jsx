@@ -1,34 +1,72 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {  Routes, Route, useLocation } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
+import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/LoginPage";
+import Dashboard from "./pages/Dashboard";
 import ProductDetailWrapper from "./pages/ProductDetailWrapper";
+
+
+
 
 function App() {
 
+
+  const location = useLocation();
+const hideLayout = ["/login", "/signup"].includes(location.pathname);
+
   const [likedItems, setLikedItems] = useState(() => {
-    const stored = localStorage.getItem("likedItems");
-    return stored ? JSON.parse(stored) : [];
-  });
+  const email = localStorage.getItem("email");
+  const stored = localStorage.getItem(`likedItems:${email}`);
+  return stored ? JSON.parse(stored) : [];
+});
+
 
   useEffect(() => {
-    localStorage.setItem("likedItems", JSON.stringify(likedItems));
-  }, [likedItems]);
+    const token = localStorage.getItem("token");
+    const publicPaths = ["/login", "/signup"];
+    const currentPath = window.location.pathname;
+
+
+    console.log("🧭 App.jsx route check:");
+    console.log("Current path:", currentPath);
+    console.log("Token exists:", !!token);
+
+    if (!token && !publicPaths.includes(currentPath)) {
+      window.location.replace("/login");
+    }
+  }, []);
+
+
+  useEffect(() => {
+  const email = localStorage.getItem("email");
+  if (email) {
+    localStorage.setItem(`likedItems:${email}`, JSON.stringify(likedItems));
+  }
+}, [likedItems]);
+
 
 
 
   return (
-    <Router>
-      <div className="min-h-screen flex flex-col bg-[#0f172a] text-white">
-        <Navbar notificationCount={3} likedCount={likedItems.length} />
-        <Routes>
-          <Route path="/" element={<HomePage likedItems={likedItems} setLikedItems={setLikedItems} />} />
-          <Route path="/product/:id" element={<ProductDetailWrapper />} />
-        </Routes>
-        <Footer />
-      </div>
-    </Router>
+    <AuthProvider>
+        <div className="min-h-screen flex flex-col bg-[#0f172a] text-white">
+          {!hideLayout && <Navbar notificationCount={3} likedCount={likedItems.length} />}
+
+          <Routes>
+            <Route path="/" element={<HomePage likedItems={likedItems} setLikedItems={setLikedItems} />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/login" element={<LoginPage setLikedItems={setLikedItems}/>} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/product/:id" element={<ProductDetailWrapper />} />
+          </Routes>
+
+          {!hideLayout && <Footer />}
+        </div>
+    </AuthProvider>
   );
 }
 
