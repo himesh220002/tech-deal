@@ -1,17 +1,29 @@
 import { useState, useEffect } from "react";
-import { Zap, Bell, Heart, User, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Zap, Bell, Heart, User, X, Menu } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom"; 
 import { useAuth } from "../context/AuthContext";
 import { logout as logoutApi } from "../api/auth";
 import "./../styles/newstyle.css";
 
 export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
-    const navLinks = ["Price Tracker", "Compare", "Deals", "Community"];
-    const [activeLink, setActiveLink] = useState("Price Tracker");
-    const [showProfile, setShowProfile] = useState(false);
+    const navLinks = [
+        { name: "Price Tracker", path: "/" },
+        { name: "Compare", path: "/compare" },
+        { name: "Deals", path: "/deals" },
+        { name: "Community", path: "/community" },
+    ];
+
     const navigate = useNavigate();
+    const location = useLocation();
     const { userEmail, logout } = useAuth();
     const userPic = localStorage.getItem("userPic");
+
+    const sliceEmail = userEmail?.length > 9 
+  ? userEmail.slice(0, 9) + "..." 
+  : userEmail || "";
+
+    const [showProfile, setShowProfile] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     useEffect(() => {
         setShowProfile(false);
@@ -24,7 +36,6 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
             console.error("Logout API call failed:", err.message);
         }
 
-        // Clear localStorage for this user
         localStorage.removeItem(`likedItems:${userEmail}`);
         localStorage.removeItem("email");
         localStorage.removeItem("token");
@@ -35,7 +46,7 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
     };
 
     return (
-        <nav className="flex justify-between items-center px-8 py-4 bg-[#1e293b] shadow relative">
+        <nav className="flex justify-between items-center px-6 py-4 bg-[#1e293b] shadow relative">
             {/* Logo */}
             <div
                 className="flex gap-2 items-center cursor-pointer"
@@ -47,23 +58,24 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                 <h1 className="text-xl font-bold text-purple-400">Tech Deal Radar</h1>
             </div>
 
-            {/* Nav Links */}
-            <ul className="flex gap-6">
+            {/* Desktop Nav Links */}
+            <ul className="hidden md:flex gap-6">
                 {navLinks.map((link) => (
                     <li
-                        key={link}
-                        onClick={() => setActiveLink(link)}
-                        className={`px-3 py-1 rounded cursor-pointer transition ${link === activeLink
-                                ? "bg-blue-600 text-white"
-                                : "hover:bg-blue-500 hover:text-white text-gray-300"
-                            }`}
+                        key={link.name}
+                        onClick={() => navigate(link.path)}
+                        className={`px-3 py-1 rounded cursor-pointer transition ${
+                            location.pathname === link.path
+                                ? "bg-gradient-to-r from-blue-600 to-purple-900 text-white"
+                                : "hover:bg-gradient-to-r from-blue-800 to-purple-900 hover:text-white text-gray-300"
+                        }`}
                     >
-                        {link}
+                        {link.name}
                     </li>
                 ))}
             </ul>
 
-            {/* Icons */}
+            {/* Icons + Hamburger */}
             <div className="flex gap-4 items-center">
                 {/* Profile */}
                 {userEmail && (
@@ -107,7 +119,7 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                                     <div>
                                         <p className="text-sm text-gray-700">
                                             Logged in as: <br />
-                                            <span className="font-semibold">{userEmail}</span>
+                                            <span className="font-semibold">{sliceEmail}</span>
                                         </p>
                                     </div>
                                 </div>
@@ -123,7 +135,7 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                 )}
 
                 {/* Notifications */}
-                <div className="relative">
+                <div className="relative hidden sm:block">
                     <button className="p-2 rounded-full hover:bg-blue-500 transition">
                         <Bell className="w-5 h-5 text-white" />
                     </button>
@@ -135,7 +147,7 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                 </div>
 
                 {/* Liked Items */}
-                <div className="relative">
+                <div className="relative hidden sm:block">
                     <button className="p-2 rounded-full hover:bg-blue-500 transition">
                         <Heart className="w-5 h-5 text-white" />
                     </button>
@@ -145,7 +157,37 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                         </span>
                     )}
                 </div>
+
+                {/* Hamburger (mobile only) */}
+                <button
+                    className="md:hidden p-2 rounded hover:bg-gray-700 transition"
+                    onClick={() => setMenuOpen(!menuOpen)}
+                >
+                    {menuOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
+                </button>
             </div>
+
+            {/* Mobile Dropdown Menu */}
+            {menuOpen && (
+                <div className="absolute top-full left-0 w-full bg-[#1e293b] flex flex-col md:hidden shadow-lg z-40">
+                    {navLinks.map((link) => (
+                        <button
+                            key={link.name}
+                            onClick={() => {
+                                navigate(link.path);
+                                setMenuOpen(false);
+                            }}
+                            className={`px-4 py-3 text-left transition ${
+                                location.pathname === link.path
+                                    ? "bg-gradient-to-r from-blue-600 to-purple-900 text-white"
+                                    : "hover:bg-gradient-to-r from-blue-800 to-purple-900 hover:text-white text-gray-300"
+                            }`}
+                        >
+                            {link.name}
+                        </button>
+                    ))}
+                </div>
+            )}
         </nav>
     );
 }
