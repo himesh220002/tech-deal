@@ -57,7 +57,7 @@ function Footer() {
                 © 2024 Tech Deal Radar. All rights reserved.
               </p>
               <div className="flex items-center space-x-4 mt-4 md:mt-0">
-                <span className="text-gray-400 text-sm">Made with ❤️ for tech enthusiasts</span>
+                <span className="text-gray-400 text-sm"> Made with ❤️ by Himesh — for devs who dream in terminal.</span>
               </div>
             </div>
           </div>
