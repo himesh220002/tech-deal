@@ -4,6 +4,9 @@ import { AuthProvider } from "./context/AuthContext";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
+import Compare from "./pages/Compare";
+import DealsPage from "./pages/DealsPage";
+import CommunityPage from "./pages/CommunityPage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import Dashboard from "./pages/Dashboard";
@@ -58,6 +61,9 @@ const hideLayout = ["/login", "/signup"].includes(location.pathname);
 
           <Routes>
             <Route path="/" element={<HomePage likedItems={likedItems} setLikedItems={setLikedItems} />} />
+            <Route path="/compare" element={<Compare />} /> 
+            <Route path="/deals" element={<DealsPage />} /> 
+            <Route path="/community" element={<CommunityPage />} /> 
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/login" element={<LoginPage setLikedItems={setLikedItems}/>} />
             <Route path="/dashboard" element={<Dashboard />} />
