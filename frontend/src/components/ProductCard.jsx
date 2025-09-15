@@ -64,7 +64,7 @@ export default function ProductCard({ product }) {
 
         // Sync with backend
         try {
-            await fetch("http://localhost:5000/api/auth/update-likes", {
+            await fetch("https://tech-deal-backend.onrender.com/api/auth/update-likes", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, likedItems: updatedLikes }),
