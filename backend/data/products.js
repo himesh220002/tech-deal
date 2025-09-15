@@ -248,7 +248,7 @@ const products = [
 
     availableAt: ["MSI Store", "Amazon", "MD Computers"],
     lowestPrice: "₹15,499",
-    image: "https://modxcomputerscomca8ca.zapwp.com/q:i/r:0/wp:1/w:480/u:https://modxcomputers.com/wp-content/uploads/2025/03/1024-5.png", // Replace with actual 255XF image if available
+    image: "https://m.media-amazon.com/images/I/71W2GzkJGJL._SL1500_.jpg", 
     specs: {
       Resolution: "1920 x 1080 (Full HD)",
       Panel: "Rapid IPS with HDR Ready",
