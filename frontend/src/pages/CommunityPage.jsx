@@ -148,6 +148,7 @@ export default function CommunityPage() {
           >
             <option>General</option>
             <option>Mobile</option>
+            <option>Tablet</option>
             <option>Laptop</option>
             <option>Audio</option>
             <option>Deals</option>
