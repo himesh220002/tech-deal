@@ -9,7 +9,7 @@ export default function HomePage({ likedItems, setLikedItems }) {
   const [products, setProducts] = useState([]);
   const [activeCategory, setActiveCategory] = useState("All Products");
   const [searchTerm, setSearchTerm] = useState("");
-  const [visibleCount, setVisibleCount] = useState(6); // show 2 rows initially
+  const [visibleCount, setVisibleCount] = useState(8); // show 2 rows initially
 
   const navigate = useNavigate();
   const dashboardRef = useRef(null);
@@ -21,6 +21,7 @@ export default function HomePage({ likedItems, setLikedItems }) {
   const categoryMap = {
     Smartphones: "Mobile",
     Laptops: "Laptop",
+    Tablet: "Tablet",
     Audio: "Audio",
     Displays: "Display",
     Storage: "Storage",
@@ -60,7 +61,7 @@ export default function HomePage({ likedItems, setLikedItems }) {
         )}
 
         {/* Responsive Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {filteredProducts.slice(0, visibleCount).map((product) => (
             <ProductCard
               key={product.id}
@@ -77,7 +78,7 @@ export default function HomePage({ likedItems, setLikedItems }) {
               <div className="relative group">
                 <button
                   className="relative inline-block p-px font-semibold leading-6 text-white bg-gray-800 shadow-2xl cursor-pointer rounded-xl shadow-zinc-900 transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95"
-                  onClick={() => setVisibleCount((prev) => prev + 3)}
+                  onClick={() => setVisibleCount((prev) => prev + 4)}
                 >
                   <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-teal-400 via-blue-500 to-purple-500 p-[2px] opacity-0 transition-opacity duration-500 group-hover:opacity-100"></span>
 

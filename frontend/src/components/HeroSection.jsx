@@ -1,10 +1,11 @@
-import { Search, Target, Smartphone, Laptop, Headphones, Monitor, HardDrive, Cpu, Mouse } from "lucide-react";
+import { Search, Target, Smartphone, Tablet, Laptop, Headphones, Monitor, HardDrive, Cpu, Mouse } from "lucide-react";
 import { useState } from "react";
 
 export default function HeroSection({ activeCategory, setActiveCategory, setSearchTerm, dashboardRef }) {
   const categories = [
     { name: "All Products", icon: Target },
     { name: "Smartphones", icon: Smartphone },
+    { name: "Tablet", icon: Tablet },
     { name: "Laptops", icon: Laptop },
     { name: "Audio", icon: Headphones },
     { name: "Displays", icon: Monitor },

@@ -2,12 +2,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login as loginApi } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
+import { useLiked } from "../context/LikedContext";
 
-export default function LoginPage({setLikedItems}) {
+export default function LoginPage({ }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const { setLikedItems } = useLiked();
     const navigate = useNavigate();
     const { login } = useAuth();
 
@@ -18,7 +20,10 @@ export default function LoginPage({setLikedItems}) {
         if (res.token) {
             login(email, res.token);
             localStorage.setItem("email", email);
+            localStorage.setItem("token", res.token);
+            localStorage.setItem(`likedItems:${email}`, JSON.stringify(res.likedItems || []));
             setLikedItems(res.likedItems || []);
+
             setMessage("Login successful ✅ Redirecting...");
             setTimeout(() => {
                 setLoading(false);
