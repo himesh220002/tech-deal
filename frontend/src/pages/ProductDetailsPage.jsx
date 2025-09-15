@@ -44,25 +44,21 @@ export default function ProductDetail({ product }) {
       </div> */}
 
       {/* Grid layout */}
-      <div className="grid md:grid-cols-2 gap-10 items-start mt-10">
+      <div className="grid md:grid-cols-[2fr_3fr] gap-10 items-start mt-2 md:mt-10">
         {/* Image & Chart */}
-        <div className="flex flex-col items-center md:items-end gap-10 w-80 sm:w-full ">
+        <div className="flex flex-col items-center md:items-end gap-10 w-fit sm:w-full ">
           <img
             src={product.image}
             alt={product.name}
             className="rounded-xl shadow-lg w-full max-h-[500px] object-contain bg-black"
           />
-          <PriceChart
-            launchPrice={launchPrice}
-            salePrice={companyPrice}
-            extraDiscountPrice={finalPrice}
-          />
+          
         </div>
 
         {/* Details */}
         <div className="w-full">
           {/* Title */}
-          <h2 className="text-2xl md:text-3xl font-bold text-purple-400">
+          <h2 className="text-2xl md:text-3xl text-center md:text-start font-bold text-purple-400">
             {product.name}
           </h2>
 
@@ -89,7 +85,7 @@ export default function ProductDetail({ product }) {
           {/* Specs */}
           {product.specs && (
             <div className="mt-6">
-              <h3 className="font-semibold mb-2">Specifications:</h3>
+              <h3 className="font-semibold text-center md:text-start mb-2">Specifications</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {Object.entries(product.specs).map(([key, value]) => (
                   <div
@@ -117,7 +113,7 @@ export default function ProductDetail({ product }) {
 
           {/* Available Stores */}
           <div className="mt-6">
-            <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-start sm:items-center">
+            <div className="flex gap-6 sm:gap-10 items-center justify-between sm:items-center">
               <div>
                 <h3 className="font-semibold mb-2">Available At:</h3>
                 <ul className="list-disc pl-6 text-gray-300 text-sm md:text-base">
@@ -138,7 +134,7 @@ export default function ProductDetail({ product }) {
           </div>
 
           {/* Discount Calculator */}
-          <div className="mt-8 space-y-4">
+          <div className="mt-10 space-y-4">
             <div className="flex flex-col sm:flex-row gap-3 sm:items-end">
               <p className="text-lg md:text-xl font-bold text-purple-300">
                 Final Price after extra discounts:{" "}
@@ -152,12 +148,15 @@ export default function ProductDetail({ product }) {
               </span>
             </div>
 
+            <div className="flex flex-col md:flex-row gap-2 md:gap-10">
+
             {["student", "bank", "festive"].map((key) => (
               <div
                 key={key}
-                className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3"
+                className="flex flex-row sm:flex-row items-center gap-2 justify-between sm:gap-3 border border-gray-700 px-3 py-1 rounded-md"
               >
-                <label className="w-24 capitalize text-sm md:text-base">
+                <div className="flex items-center gap-5">
+                <label className="w-18 md:w-20 capitalize text-sm md:text-base">
                   {key} %
                 </label>
                 <input
@@ -171,13 +170,23 @@ export default function ProductDetail({ product }) {
                   }
                   className="px-3 py-2 rounded bg-[#1e293b] border border-gray-600 w-24 text-sm md:text-base"
                 />
+                </div>
                 {reductions[key] > 0 && (
                   <span className="text-green-400 font-semibold text-sm md:text-base">
                     -₹{Math.round(reductions[key]).toLocaleString()}
                   </span>
                 )}
               </div>
+              
             ))}
+
+            </div>
+
+            <PriceChart
+            launchPrice={launchPrice}
+            salePrice={companyPrice}
+            extraDiscountPrice={finalPrice}
+          />
           </div>
         </div>
       </div>

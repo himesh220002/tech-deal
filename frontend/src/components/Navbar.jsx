@@ -179,7 +179,7 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
 
             {/* Mobile Dropdown Menu */}
             {menuOpen && (
-                <div className="absolute top-full left-0 w-full bg-[#1e293b] flex flex-col md:hidden shadow-lg z-40">
+                <div className="absolute top-full right-0 w-50 bg-[#1e293b]  rounded-b-md flex flex-col md:hidden shadow-lg z-40">
                     {navLinks.map((link) => (
                         <button
                             key={link.name}
@@ -187,7 +187,7 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                                 navigate(link.path);
                                 setMenuOpen(false);
                             }}
-                            className={`px-4 py-3 text-left transition ${location.pathname === link.path
+                            className={`px-4 py-2 text-center transition ${location.pathname === link.path
                                     ? "bg-gradient-to-r from-blue-600 to-purple-900 text-white"
                                     : "hover:bg-gradient-to-r from-blue-800 to-purple-900 hover:text-white text-gray-300"
                                 }`}

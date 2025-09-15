@@ -113,7 +113,7 @@ export default function PriceChart({ launchPrice, salePrice, extraDiscountPrice 
   };
   
   return (
-    <div className="flex justify-center  w-80 sm:w-full sm:max-w-[700px] h-[250px] md:h-[350px] rounded-xl shadow-md p-4 bg-gray-200 shadow-gray-800">
+    <div className="flex justify-center  w-[340px] sm:w-full sm:max-w-[700px] h-[250px] md:h-[350px] rounded-xl shadow-md p-4 bg-gray-200 shadow-gray-800">
       <Bar data={data} options={options} />
     </div>
   );
