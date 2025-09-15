@@ -38,13 +38,11 @@ export default function CommunityPage() {
   const [newTag, setNewTag] = useState("General");
   const [username] = useState("You");
 
-  // Track posts the user has upvoted (for toggle)
   const [upvotedPosts, setUpvotedPosts] = useState(() => {
     const saved = localStorage.getItem("upvotedPosts");
     return saved ? JSON.parse(saved) : [];
   });
 
-  // Save posts & upvotes on every change
   useEffect(() => {
     localStorage.setItem("communityPosts", JSON.stringify(posts));
   }, [posts]);
@@ -55,13 +53,11 @@ export default function CommunityPage() {
 
   const handleUpvote = (id) => {
     if (upvotedPosts.includes(id)) {
-      // Remove vote
       setPosts((prev) =>
         prev.map((p) => (p.id === id ? { ...p, upvotes: p.upvotes - 1 } : p))
       );
       setUpvotedPosts((prev) => prev.filter((pid) => pid !== id));
     } else {
-      // Add vote
       setPosts((prev) =>
         prev.map((p) => (p.id === id ? { ...p, upvotes: p.upvotes + 1 } : p))
       );
@@ -90,7 +86,7 @@ export default function CommunityPage() {
   };
 
   return (
-    <div className="p-6 text-gray-200 mx-40">
+    <div className="px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40 py-6 text-gray-200">
       <h2 className="text-3xl font-bold mb-6">👥 Community</h2>
 
       {/* Posts */}
@@ -100,14 +96,10 @@ export default function CommunityPage() {
             key={post.id}
             className="bg-[#1e293b] rounded-xl p-4 shadow flex flex-col gap-2"
           >
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-400">
-                Posted by {post.user}
-              </span>
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+              <span className="text-sm text-gray-400">Posted by {post.user}</span>
               <div className="flex items-center gap-2">
-                <span className="bg-gray-700 text-xs px-2 py-1 rounded">
-                  {post.tag}
-                </span>
+                <span className="bg-gray-700 text-xs px-2 py-1 rounded">{post.tag}</span>
                 {post.user === username && (
                   <button
                     onClick={() => handleDelete(post.id)}
@@ -139,16 +131,16 @@ export default function CommunityPage() {
         ))}
       </div>
 
-      {/* Post input at bottom */}
+      {/* Post input */}
       <div className="bg-[#1e293b] rounded-xl p-4 shadow mt-10">
         <h3 className="text-lg font-semibold mb-2">Share something...</h3>
         <textarea
           value={newPost}
           onChange={(e) => setNewPost(e.target.value)}
-          className="w-full min-h-40 p-2 rounded bg-gray-900 text-gray-200 mb-2 outline-none"
+          className="w-full min-h-40 p-2 rounded bg-gray-900 text-gray-200 mb-2 outline-none resize-none"
           placeholder="What's on your mind?"
         />
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <select
             value={newTag}
             onChange={(e) => setNewTag(e.target.value)}
