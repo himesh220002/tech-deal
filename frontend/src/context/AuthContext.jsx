@@ -30,6 +30,8 @@ export function AuthProvider({ children }) {
 
   const logout = () => {
 
+    const email = localStorage.getItem("userEmail")?.trim().toLowerCase();
+
     console.log("🚪 Logging out...");
     console.log("Before cleanup:", {
       userEmail: localStorage.getItem("userEmail"),
@@ -41,6 +43,9 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("userEmail");
     localStorage.removeItem("token");
 
+    if (email) {
+    localStorage.removeItem(`likedItems:${email}`); 
+  }
     console.log("After cleanup:", {
       userEmail: localStorage.getItem("userEmail"),
       token: localStorage.getItem("token"),

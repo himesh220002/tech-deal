@@ -1,8 +1,15 @@
+//backend/routes/auth.js
+
+
 import express from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
-import { db } from "../db.js";
+import { db } from "../drizzle/db.js";
+import { eq, sql } from "drizzle-orm";
+import { users } from "../drizzle/schema/users.js";
+
+const newId = Math.floor(10000000 + Math.random() * 90000000);;
 
 const router = express.Router();
 
@@ -15,20 +22,52 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+// Signup
 router.post("/signup", async (req, res) => {
     const { email, password } = req.body;
     const redis = req.app.locals.redis;
 
     try {
-        const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
-        if (rows.length > 0) return res.status(400).json({ message: "User already exists" });
+        //  SELECT using $client.query
+        const result = await db.$client.query("SELECT * FROM users WHERE email = $1", [email]);
+        const existing = result || [];
+        
+        console.log("existing email-",existing);
+        if (existing.length > 0) {
+            console.log("reached existing email block");
+            const user = existing[0];
+
+            if (user.verified) {
+                return res.status(400).json({ message: "User already exists and is verified" });
+            }
+
+            // Resend verification link
+            const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "15m" });
+            await redis.set(`verify:${email}`, token, { EX: 900 });
+
+            const verifyUrl = `http://localhost:5000/api/auth/verify/${token}`;
+            await transporter.sendMail({
+                from: process.env.EMAIL_USER,
+                to: email,
+                subject: "Verify your account",
+                html: `
+      <h2>Welcome back to Tech Deal Radar!</h2>
+      <p>You previously signed up but didn’t verify your email. Click below to verify:</p>
+      <a href="${verifyUrl}" style="background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Verify Email</a>
+      <p>This link expires in 15 minutes.</p>
+    `,
+            });
+
+            return res.json({ message: "Verification link resent. Please check your email." });
+        }
 
         const hashed = await bcrypt.hash(password, 10);
         const name = email.split("@")[0].replace(/[^a-zA-Z]/g, "");
 
-        await db.query(
-            "INSERT INTO users (name, email, password, verified) VALUES (?, ?, ?, ?)",
-            [name, email, hashed, false]
+        // INSERT using $client.query
+        await db.$client.query(
+            "INSERT INTO users (id, name, email, password, verified) VALUES ($1, $2, $3, $4, $5)",
+            [newId, name, email, hashed, false]
         );
 
         const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "15m" });
@@ -47,6 +86,9 @@ router.post("/signup", async (req, res) => {
       `,
         });
 
+        console.log("Inserted email:", email);
+
+
         res.json({ message: "Signup successful. Please verify your email." });
     } catch (err) {
         console.error("❌ Signup error:", err);
@@ -54,6 +96,9 @@ router.post("/signup", async (req, res) => {
     }
 });
 
+
+
+// Email Verification
 router.get("/verify/:token", async (req, res) => {
     const { token } = req.params;
     const redis = req.app.locals.redis;
@@ -66,7 +111,11 @@ router.get("/verify/:token", async (req, res) => {
             return res.status(400).send("Invalid or expired verification link");
         }
 
-        await db.query("UPDATE users SET verified = true WHERE email = ?", [decoded.email]);
+        await db.$client.query(
+            "UPDATE users SET verified = true WHERE email = $1",
+            [decoded.email]
+        );
+
         await redis.del(`verify:${decoded.email}`);
 
         res.send(`
@@ -84,15 +133,21 @@ router.get("/verify/:token", async (req, res) => {
     }
 });
 
+// Login
 router.post("/login", async (req, res) => {
-    const { email, password } = req.body;
+    const email = req.body.email.trim().toLowerCase();
+    const password = req.body.password;
     const redis = req.app.locals.redis;
 
     try {
-        const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
-        if (rows.length === 0) return res.status(400).json({ message: "User not found" });
+        const result = await db.$client.query("SELECT * FROM users WHERE email = $1", [email]);
+        const rows = result.rows || [];
 
-        const user = rows[0];
+        console.log("Login attempt for:", email);
+       
+        if (result.length === 0) return res.status(400).json({ message: "User not found" });
+
+        const user = result[0];
         if (!user.verified) return res.status(403).json({ message: "Please verify your email first" });
 
         const match = await bcrypt.compare(password, user.password);
@@ -108,21 +163,24 @@ router.post("/login", async (req, res) => {
             likedItems = [];
         }
 
-        res.json({ token, email, likedItems });
 
+
+        res.json({ token, email, likedItems });
     } catch (err) {
         console.error("❌ Login error:", err);
         res.status(500).json({ message: "Login failed. Please try again." });
     }
 });
 
+// Update Likes
 router.post("/update-likes", async (req, res) => {
     const { email, likedItems } = req.body;
     try {
-        await db.query("UPDATE users SET liked_items = ? WHERE email = ?", [
-            JSON.stringify(likedItems),
-            email,
-        ]);
+        await db.$client.query(
+            "UPDATE users SET liked_items = $1 WHERE email = $2",
+            [JSON.stringify(likedItems), email]
+        );
+
         res.json({ message: "Liked items updated" });
     } catch (err) {
         console.error("❌ Like update error:", err);
@@ -130,7 +188,7 @@ router.post("/update-likes", async (req, res) => {
     }
 });
 
-
+// Logout
 router.post("/logout", async (req, res) => {
     const redis = req.app.locals.redis;
 
@@ -149,6 +207,7 @@ router.post("/logout", async (req, res) => {
     }
 });
 
+// Protected Route
 router.get("/protected", async (req, res) => {
     const redis = req.app.locals.redis;
     const authHeader = req.headers["authorization"];
