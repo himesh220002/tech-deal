@@ -13,6 +13,29 @@ export default function HomePage({ likedItems, setLikedItems }) {
 
   const navigate = useNavigate();
   const dashboardRef = useRef(null);
+  const hasMounted = useRef(false);
+  const prevCategory = useRef(activeCategory);
+
+
+  const scrollToDashboard = () => {
+    dashboardRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    if (hasMounted.current && prevCategory.current !== activeCategory) {
+      scrollToDashboard();
+    }
+    hasMounted.current = true;
+    prevCategory.current = activeCategory;
+  }, [activeCategory]);
+
+
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
+
 
   useEffect(() => {
     getProducts().then(setProducts);
