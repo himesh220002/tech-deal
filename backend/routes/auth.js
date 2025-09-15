@@ -27,12 +27,23 @@ router.post("/signup", async (req, res) => {
     const { email, password } = req.body;
     const redis = req.app.locals.redis;
 
+    // Rate limit signup attempts per email
+    const attemptsKey = `signup:${email}`;
+    const attempts = await redis.incr(attemptsKey);
+    if (attempts === 1) {
+        await redis.expire(attemptsKey, 3600); // 1 hour window
+    }
+    console.log(`📊 Signup attempts for ${email}: ${attempts}`);
+    if (attempts > 5) {
+        return res.status(429).json({ message: "Too many signup attempts. Try again later." });
+    }
+
     try {
         //  SELECT using $client.query
         const result = await db.$client.query("SELECT * FROM users WHERE email = $1", [email]);
         const existing = result || [];
-        
-        console.log("existing email-",existing);
+
+        console.log("existing email-", existing);
         if (existing.length > 0) {
             console.log("reached existing email block");
             const user = existing[0];
@@ -144,7 +155,7 @@ router.post("/login", async (req, res) => {
         const rows = result.rows || [];
 
         console.log("Login attempt for:", email);
-       
+
         if (result.length === 0) return res.status(400).json({ message: "User not found" });
 
         const user = result[0];
@@ -155,6 +166,9 @@ router.post("/login", async (req, res) => {
 
         const token = jwt.sign({ email, userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
         await redis.set(`session:${email}`, token, { EX: 3600 });
+
+        const ttl = await redis.ttl(`session:${email}`);
+        console.log(`🕒 Session TTL for ${email}: ${ttl}s`);
 
         let likedItems = [];
         try {
