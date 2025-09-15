@@ -27,13 +27,13 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
 
     useEffect(() => {
         setShowProfile(false);
-    }, [userEmail]);
+    }, [userEmail,menuOpen]);
 
     useEffect(() => {
         if (showProfile) {
             const timer = setTimeout(() => {
                 setShowProfile(false);
-            }, 8000); // 8 seconds
+            }, 6000); // 8 seconds
 
             return () => clearTimeout(timer); // cleanup on unmount or toggle
         }
