@@ -31,9 +31,8 @@ export default function Compare() {
 
     return (
         <div className="p-4 sm:p-6  mx-auto">
-            <h1 className="text-2xl sm:text-3xl font-bold text-purple-400 mb-6 text-center p-2 bg-[#0f171a]">
+            <h1 className="text-2xl sm:text-3xl font-bold text-purple-400 mb-6 text-center p-2 bg-[#0f171a] rounded-xl">
                 Product Comparison
-                <hr className="border-gray-700 my-2" />
             </h1>
 
             {/* Select Type */}
