@@ -56,7 +56,7 @@ router.post("/signup", async (req, res) => {
             const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "15m" });
             await redis.set(`verify:${email}`, token, { EX: 900 });
 
-            const verifyUrl = `http://localhost:5000/api/auth/verify/${token}`;
+            const verifyUrl = `https://tech-deal-backend.onrender.com/api/auth/verify/${token}`;
             await transporter.sendMail({
                 from: process.env.EMAIL_USER,
                 to: email,
@@ -84,7 +84,7 @@ router.post("/signup", async (req, res) => {
         const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "15m" });
         await redis.set(`verify:${email}`, token, { EX: 900 });
 
-        const verifyUrl = `http://localhost:5000/api/auth/verify/${token}`;
+        const verifyUrl = `https://tech-deal-backend.onrender.com/api/auth/verify/${token}`;
         await transporter.sendMail({
             from: process.env.EMAIL_USER,
             to: email,
