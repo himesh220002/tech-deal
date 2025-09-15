@@ -28,7 +28,7 @@ export default function HeroSection({ activeCategory, setActiveCategory, setSear
       </p>
 
       {/* Search Bar */}
-      <div className="mt-6 md:mt-10 w-full max-w-[800px] mx-auto flex items-center rounded-lg border border-gray-600 bg-gray-800 px-4 py-1 md:py-4 shadow">
+      <div className="mt-6 md:mt-10 w-full max-w-[800px] mx-auto flex items-center rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 md:py-4 shadow">
         <Search className="text-gray-400 w-5 h-5 mr-2" />
         <input
           type="text"

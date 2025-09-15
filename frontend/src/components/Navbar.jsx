@@ -22,22 +22,21 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
         ? userEmail.slice(0, 9) + "..."
         : userEmail || "";
 
-    const [showProfile, setShowProfile] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
+    const [activePanel, setActivePanel] = useState(null);
+
+    const togglePanel = (panel) => {
+        setActivePanel((prev) => (prev === panel ? null : panel));
+    };
 
     useEffect(() => {
-        setShowProfile(false);
-    }, [userEmail, menuOpen]);
-
-    useEffect(() => {
-        if (showProfile) {
+        if (activePanel === "profile") {
             const timer = setTimeout(() => {
-                setShowProfile(false);
-            }, 6000); // 8 seconds
-
-            return () => clearTimeout(timer); // cleanup on unmount or toggle
+                setActivePanel(null);
+            }, 6000);
+            return () => clearTimeout(timer);
         }
-    }, [showProfile]);
+    }, [activePanel]);
+
 
 
     const handleLogout = async () => {
@@ -60,14 +59,17 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
         <nav className="flex justify-between items-center px-6 py-4 bg-[#1e293b] shadow relative">
             {/* Logo */}
             <div
-                className="flex gap-2 items-center cursor-pointer"
+                className="flex gap-2 items-center cursor-pointer group"
                 onClick={() => navigate("/")}
             >
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                    <Zap className="w-5 h-5 text-white" />
+                <div className="w-9 h-9 bg-gradient-to-r from-blue-600 via-indigo-700 to-purple-600 rounded-lg flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
+                    <Zap className="w-5 h-5 text-white drop-shadow-md animate-pulse" />
                 </div>
-                <h1 className="text-xl font-bold text-purple-400">Tech Deal Radar</h1>
+                <h1 className="text-xl sm:text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-400 tracking-wide">
+                    Tech Deal Radar
+                </h1>
             </div>
+
 
             {/* Desktop Nav Links */}
             <ul className="hidden md:flex gap-6">
@@ -84,7 +86,6 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                     </li>
                 ))}
             </ul>
-
             {/* Icons + Hamburger */}
             <div className="flex gap-4 items-center">
                 {/* Profile */}
@@ -92,7 +93,7 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                     <div className="relative group">
                         <button
                             className="w-9 h-9 rounded-full overflow-hidden border-2 border-gray-400 hover:border-blue-500 transition cursor-pointer flex items-center justify-center bg-gray-700"
-                            onClick={() => setShowProfile(!showProfile)}
+                            onClick={() => togglePanel("profile")}
                         >
                             {userPic ? (
                                 <img src={userPic} alt="Profile" className="w-full h-full object-cover" />
@@ -101,26 +102,23 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                             )}
                         </button>
 
-                        {!showProfile && (
+                        {/* Tooltip on hover */}
+                        {activePanel !== "profile" && (
                             <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap">
                                 {userEmail}
                             </div>
                         )}
 
-                        {showProfile && (
-                            <div className="absolute -right-20 mt-2 w-72 bg-[#0f171a] text-white rounded-lg shadow-xl p-4 z-50 flex flex-col gap-4">
-                                {/* Header */}
+                        {/* Profile Panel */}
+                        {activePanel === "profile" && (
+                            <div className="absolute top-14 -right-20 mt-2 w-72 bg-[#0f171a] text-white rounded-lg shadow-xl p-4 z-50 flex flex-col gap-4">
                                 <div className="flex justify-between items-center">
                                     <h3 className="font-semibold text-lg">Account</h3>
-                                    <button
-                                        onClick={() => setShowProfile(false)}
-                                        className="text-gray-400 hover:text-white"
-                                    >
+                                    <button onClick={() => togglePanel("profile")} className="text-gray-400 hover:text-white">
                                         <X size={18} />
                                     </button>
                                 </div>
 
-                                {/* User Info */}
                                 <div className="flex items-center gap-3">
                                     {userPic ? (
                                         <img src={userPic} alt="Profile" className="w-12 h-12 rounded-full object-cover" />
@@ -131,26 +129,21 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                                     )}
                                     <div>
                                         <p className="text-sm text-gray-300">{userEmail}</p>
-                                        <p className="text-xs text-gray-500">Signed in as <span className="font-medium">{sliceEmail}</span></p>
+                                        <p className="text-xs text-gray-500">
+                                            Signed in as <span className="font-medium">{sliceEmail}</span>
+                                        </p>
                                     </div>
                                 </div>
 
                                 <hr className="border-gray-700" />
 
                                 <div className="flex justify-between text-sm text-gray-300">
-                                    <span>Voice</span><span className="text-purple-400">RAIN</span>
-                                </div>
-                                <div className="flex justify-between text-sm text-gray-300">
-                                    <span>Theme</span><span className="text-purple-400">NIGHT</span>
-                                </div>
-                                <div className="flex justify-between text-sm text-gray-300">
-                                    <span>Language</span><span className="text-purple-400">EN</span>
+                                    <span>Language</span>
+                                    <span className="text-purple-400">EN</span>
                                 </div>
 
-                                {/* Divider */}
                                 <hr className="border-gray-700" />
 
-                                {/* Logout */}
                                 <button
                                     onClick={handleLogout}
                                     className="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
@@ -158,7 +151,6 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                                     Logout
                                 </button>
 
-                                {/* Footer Links */}
                                 <div className="flex justify-between text-xs text-gray-400 pt-2 border-t border-gray-700">
                                     <button className="hover:text-white">Privacy</button>
                                     <button className="hover:text-white">Terms</button>
@@ -166,7 +158,6 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                                 </div>
                             </div>
                         )}
-
                     </div>
                 )}
 
@@ -194,24 +185,28 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                     )}
                 </div>
 
-                {/* Hamburger (mobile only) */}
+                {/* Hamburger */}
                 <button
                     className="md:hidden p-2 rounded hover:bg-gray-700 transition"
-                    onClick={() => setMenuOpen(!menuOpen)}
+                    onClick={() => togglePanel("menu")}
                 >
-                    {menuOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
+                    {activePanel === "menu" ? (
+                        <X className="w-6 h-6 text-white" />
+                    ) : (
+                        <Menu className="w-6 h-6 text-white" />
+                    )}
                 </button>
             </div>
 
             {/* Mobile Dropdown Menu */}
-            {menuOpen && (
+            {activePanel === "menu" && (
                 <div className="fixed top-20 right-0 w-64 bg-[#0f171a] text-white rounded-l-lg shadow-2xl z-50 flex flex-col md:hidden transition-transform duration-300">
                     {navLinks.map((link) => (
                         <button
                             key={link.name}
                             onClick={() => {
                                 navigate(link.path);
-                                setMenuOpen(false);
+                                togglePanel("menu");
                             }}
                             className={`px-4 py-3 rounded-tl-lg text-left text-sm font-medium transition ${location.pathname === link.path
                                 ? "bg-gradient-to-r from-blue-600 to-purple-900 text-white"
@@ -222,10 +217,8 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                         </button>
                     ))}
 
-                    {/* Divider */}
                     <hr className="border-gray-700 my-2" />
 
-                    {/* Footer Links */}
                     <div className="flex justify-around text-xs text-gray-400 px-4 pb-4">
                         <button className="hover:text-white">Privacy</button>
                         <button className="hover:text-white">Terms</button>
@@ -233,6 +226,7 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                     </div>
                 </div>
             )}
+
 
         </nav>
     );
