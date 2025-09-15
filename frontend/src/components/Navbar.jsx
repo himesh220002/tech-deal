@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Zap, Bell, Heart, User, X, Menu } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom"; 
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { logout as logoutApi } from "../api/auth";
 import "./../styles/newstyle.css";
@@ -18,9 +18,9 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
     const { userEmail, logout } = useAuth();
     const userPic = localStorage.getItem("userPic");
 
-    const sliceEmail = userEmail?.length > 9 
-  ? userEmail.slice(0, 9) + "..." 
-  : userEmail || "";
+    const sliceEmail = userEmail?.length > 9
+        ? userEmail.slice(0, 9) + "..."
+        : userEmail || "";
 
     const [showProfile, setShowProfile] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
@@ -28,6 +28,17 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
     useEffect(() => {
         setShowProfile(false);
     }, [userEmail]);
+
+    useEffect(() => {
+        if (showProfile) {
+            const timer = setTimeout(() => {
+                setShowProfile(false);
+            }, 8000); // 8 seconds
+
+            return () => clearTimeout(timer); // cleanup on unmount or toggle
+        }
+    }, [showProfile]);
+
 
     const handleLogout = async () => {
         try {
@@ -64,11 +75,10 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                     <li
                         key={link.name}
                         onClick={() => navigate(link.path)}
-                        className={`px-3 py-1 rounded cursor-pointer transition ${
-                            location.pathname === link.path
+                        className={`px-3 py-1 rounded cursor-pointer transition ${location.pathname === link.path
                                 ? "bg-gradient-to-r from-blue-600 to-purple-900 text-white"
                                 : "hover:bg-gradient-to-r from-blue-800 to-purple-900 hover:text-white text-gray-300"
-                        }`}
+                            }`}
                     >
                         {link.name}
                     </li>
@@ -177,11 +187,10 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                                 navigate(link.path);
                                 setMenuOpen(false);
                             }}
-                            className={`px-4 py-3 text-left transition ${
-                                location.pathname === link.path
+                            className={`px-4 py-3 text-left transition ${location.pathname === link.path
                                     ? "bg-gradient-to-r from-blue-600 to-purple-900 text-white"
                                     : "hover:bg-gradient-to-r from-blue-800 to-purple-900 hover:text-white text-gray-300"
-                            }`}
+                                }`}
                         >
                             {link.name}
                         </button>
