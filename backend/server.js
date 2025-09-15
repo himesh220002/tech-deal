@@ -5,7 +5,21 @@ import authRoutes from "./routes/auth.js";
 import products from "./data/products.js";
 import { createClient } from "redis";
 
-dotenv.config();
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.resolve(__dirname, ".env") });
+
+
+
+import testRoutes from "./routes/test.js";
+
+
+
+// dotenv.config();
 
 const app = express();
 app.use(cors());
@@ -16,6 +30,10 @@ const redisClient = createClient({ url: process.env.REDIS_URL });
 redisClient.on("error", (err) => console.error("❌ Redis error:", err));
 await redisClient.connect();
 app.locals.redis = redisClient;
+
+
+//test
+app.use("/api/test", testRoutes);
 
 // Default route
 app.get("/", (req, res) => {

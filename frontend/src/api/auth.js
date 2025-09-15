@@ -1,4 +1,4 @@
-// src/api/auth.js
+// frontend/src/api/auth.js
 const API_BASE = "http://localhost:5000/api/auth";
 
 async function handleResponse(res) {

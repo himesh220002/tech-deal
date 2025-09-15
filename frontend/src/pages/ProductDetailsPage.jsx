@@ -32,7 +32,7 @@ export default function ProductDetail({ product }) {
   return (
     <section className="px-4 md:px-10 py-12">
       {/* Back Button */}
-      <div
+      {/* <div
         className="cursor-pointer w-fit border-4 border-black bg-gray-500 text-white pb-2 
                    transition ease-in-out duration-100 select-none active:pb-0 mb-4 
                    active:mb-6 active:translate-y-2"
@@ -41,10 +41,10 @@ export default function ProductDetail({ product }) {
         <div className="bg-gray-800 border-4 border-gray-800 px-4 py-2">
           <span className="text-lg tracking-wide">Back</span>
         </div>
-      </div>
+      </div> */}
 
       {/* Grid layout */}
-      <div className="grid md:grid-cols-2 gap-10 items-start">
+      <div className="grid md:grid-cols-2 gap-10 items-start mt-10">
         {/* Image & Chart */}
         <div className="flex flex-col items-center md:items-end gap-10 w-80 sm:w-full ">
           <img

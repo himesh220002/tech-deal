@@ -31,7 +31,7 @@ export default function PriceChart({ launchPrice, salePrice, extraDiscountPrice 
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false, // 🔥 Makes chart responsive
+    maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
       tooltip: {
@@ -111,7 +111,7 @@ export default function PriceChart({ launchPrice, salePrice, extraDiscountPrice 
       },
     },
   };
-// md:w-[500px] h-[250px] md:h-[350px] lg:h-[400px]
+  
   return (
     <div className="flex justify-center  w-80 sm:w-full sm:max-w-[700px] h-[250px] md:h-[350px] rounded-xl shadow-md p-4 bg-gray-200 shadow-gray-800">
       <Bar data={data} options={options} />

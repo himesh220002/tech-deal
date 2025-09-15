@@ -35,7 +35,7 @@ export default function Compare() {
                 Product Comparison
             </h1>
 
-            {/* Step 1: Select Type */}
+            {/* Select Type */}
             <div className="mb-6 flex flex-col sm:flex-row sm:items-center gap-3">
                 <label className="font-semibold text-gray-300">
                     Select Product Type:
@@ -62,7 +62,7 @@ export default function Compare() {
                 </select>
             </div>
 
-            {/* Step 2: Select Products */}
+            {/*  Select Products */}
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                     <label className="font-semibold text-gray-300">Product 1:</label>
@@ -97,7 +97,7 @@ export default function Compare() {
                 )}
             </div>
 
-            {/* Step 3: Stylish Comparison */}
+            {/*  Comparison */}
             {prod1 && prod2 && (
                 <div className="overflow-x-auto">
                     <div className="rounded-xl shadow-2xl overflow-hidden border border-gray-700">

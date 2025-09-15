@@ -2,10 +2,13 @@ import { TrendingDown, TrendingUp, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { useMemo } from "react";
+import { useLiked } from "../context/LikedContext";
 
-export default function ProductCard({ product, likedItems, setLikedItems }) {
+
+
+export default function ProductCard({ product }) {
     const navigate = useNavigate();
-
+    const { likedItems, setLikedItems } = useLiked();
     // Random upward/downward trend (memoized so it stays stable per render)
     const randomNum = useMemo(() => Math.floor(Math.random() * 2), []);
 
@@ -38,7 +41,7 @@ export default function ProductCard({ product, likedItems, setLikedItems }) {
     const pricelowest = parseFloat(product.lowestPrice.replace(/[₹,]/g, ""));
 
     // Discount calculation
-    const discount1 = parseFloat(((priceold - price1) / priceold) * 100).toFixed(1);
+    const discount1 = Math.round(parseFloat(((priceold - price1) / priceold) * 100));
 
     // Lowest price check
     const setLowest = pricelowest < price1 ? pricelowest : price1;
@@ -59,7 +62,7 @@ export default function ProductCard({ product, likedItems, setLikedItems }) {
 
         setLikedItems(updatedLikes);
 
-        // 🔁 Sync with backend
+        // Sync with backend
         try {
             await fetch("http://localhost:5000/api/auth/update-likes", {
                 method: "POST",

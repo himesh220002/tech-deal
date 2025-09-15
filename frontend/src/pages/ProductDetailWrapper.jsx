@@ -14,10 +14,8 @@ export default function ProductDetailWrapper() {
     window.scrollTo(0, 0);
 
     if (state?.product) {
-      // If product was passed via Link state, use it
       setProduct(state.product);
     } else {
-      // Otherwise fetch from backend
       getProducts().then((products) => {
         const found = products.find((p) => String(p.id) === String(id));
         setProduct(found);

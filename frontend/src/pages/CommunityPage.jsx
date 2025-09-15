@@ -29,7 +29,6 @@ export default function CommunityPage() {
     },
   ];
 
-  // ✅ Initialize from localStorage or fallback to defaults
   const [posts, setPosts] = useState(() => {
     const saved = localStorage.getItem("communityPosts");
     return saved ? JSON.parse(saved) : defaultPosts;

@@ -21,7 +21,6 @@ export default function SignupPage() {
         setMessage(res.message);
 
         if (res.message.includes("Please verify your email")) {
-            // ✅ don’t auto-login, wait for email verification
             setTimeout(() => {
                 navigate("/login");
             }, 2000);
