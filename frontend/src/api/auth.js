@@ -1,5 +1,7 @@
 // frontend/src/api/auth.js
-const API_BASE = "http://localhost:5000/api/auth";
+// const API_BASE = "http://localhost:5000/api/auth";
+const API_BASE = "https://tech-deal-backend.onrender.com/api/auth";
+
 
 async function handleResponse(res) {
   try {
@@ -44,7 +46,7 @@ export async function logout(email) {
 }
 
 export async function getProtected(token) {
-  const res = await fetch(`http://localhost:5000/api/protected`, {
+  const res = await fetch(`https://tech-deal-backend.onrender.com/api/protected`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.json();
