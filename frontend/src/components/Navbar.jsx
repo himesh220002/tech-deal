@@ -27,7 +27,7 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
 
     useEffect(() => {
         setShowProfile(false);
-    }, [userEmail,menuOpen]);
+    }, [userEmail, menuOpen]);
 
     useEffect(() => {
         if (showProfile) {
@@ -76,8 +76,8 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                         key={link.name}
                         onClick={() => navigate(link.path)}
                         className={`px-3 py-1 rounded cursor-pointer transition ${location.pathname === link.path
-                                ? "bg-gradient-to-r from-blue-600 to-purple-900 text-white"
-                                : "hover:bg-gradient-to-r from-blue-800 to-purple-900 hover:text-white text-gray-300"
+                            ? "bg-gradient-to-r from-blue-600 to-purple-900 text-white"
+                            : "hover:bg-gradient-to-r from-blue-800 to-purple-900 hover:text-white text-gray-300"
                             }`}
                     >
                         {link.name}
@@ -108,39 +108,65 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                         )}
 
                         {showProfile && (
-                            <div className="absolute right-0 mt-2 w-64 bg-white text-black rounded-lg shadow-xl p-4 z-50">
-                                <div className="flex justify-between items-center mb-3">
-                                    <h3 className="font-semibold">Profile</h3>
+                            <div className="absolute -right-20 mt-2 w-72 bg-[#0f171a] text-white rounded-lg shadow-xl p-4 z-50 flex flex-col gap-4">
+                                {/* Header */}
+                                <div className="flex justify-between items-center">
+                                    <h3 className="font-semibold text-lg">Account</h3>
                                     <button
                                         onClick={() => setShowProfile(false)}
-                                        className="text-gray-500 hover:text-black cursor-pointer"
+                                        className="text-gray-400 hover:text-white"
                                     >
                                         <X size={18} />
                                     </button>
                                 </div>
-                                <div className="flex items-center gap-3 mb-3">
+
+                                {/* User Info */}
+                                <div className="flex items-center gap-3">
                                     {userPic ? (
                                         <img src={userPic} alt="Profile" className="w-12 h-12 rounded-full object-cover" />
                                     ) : (
-                                        <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
-                                            <User className="w-6 h-6 text-gray-500" />
+                                        <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center">
+                                            <User className="w-6 h-6 text-gray-300" />
                                         </div>
                                     )}
                                     <div>
-                                        <p className="text-sm text-gray-700">
-                                            Logged in as: <br />
-                                            <span className="font-semibold">{sliceEmail}</span>
-                                        </p>
+                                        <p className="text-sm text-gray-300">{userEmail}</p>
+                                        <p className="text-xs text-gray-500">Signed in as <span className="font-medium">{sliceEmail}</span></p>
                                     </div>
                                 </div>
+
+                                <hr className="border-gray-700" />
+
+                                <div className="flex justify-between text-sm text-gray-300">
+                                    <span>Voice</span><span className="text-purple-400">RAIN</span>
+                                </div>
+                                <div className="flex justify-between text-sm text-gray-300">
+                                    <span>Theme</span><span className="text-purple-400">NIGHT</span>
+                                </div>
+                                <div className="flex justify-between text-sm text-gray-300">
+                                    <span>Language</span><span className="text-purple-400">EN</span>
+                                </div>
+
+                                {/* Divider */}
+                                <hr className="border-gray-700" />
+
+                                {/* Logout */}
                                 <button
                                     onClick={handleLogout}
-                                    className="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition cursor-pointer"
+                                    className="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
                                 >
                                     Logout
                                 </button>
+
+                                {/* Footer Links */}
+                                <div className="flex justify-between text-xs text-gray-400 pt-2 border-t border-gray-700">
+                                    <button className="hover:text-white">Privacy</button>
+                                    <button className="hover:text-white">Terms</button>
+                                    <button className="hover:text-white">FAQ</button>
+                                </div>
                             </div>
                         )}
+
                     </div>
                 )}
 
@@ -179,7 +205,7 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
 
             {/* Mobile Dropdown Menu */}
             {menuOpen && (
-                <div className="absolute top-full right-0 w-50 bg-[#1e293b]  rounded-b-md flex flex-col md:hidden shadow-lg z-40">
+                <div className="fixed top-20 right-0 w-64 bg-[#0f171a] text-white rounded-l-lg shadow-2xl z-50 flex flex-col md:hidden transition-transform duration-300">
                     {navLinks.map((link) => (
                         <button
                             key={link.name}
@@ -187,16 +213,27 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                                 navigate(link.path);
                                 setMenuOpen(false);
                             }}
-                            className={`px-4 py-2 text-center transition ${location.pathname === link.path
-                                    ? "bg-gradient-to-r from-blue-600 to-purple-900 text-white"
-                                    : "hover:bg-gradient-to-r from-blue-800 to-purple-900 hover:text-white text-gray-300"
+                            className={`px-4 py-3 rounded-tl-lg text-left text-sm font-medium transition ${location.pathname === link.path
+                                ? "bg-gradient-to-r from-blue-600 to-purple-900 text-white"
+                                : "hover:bg-gradient-to-r from-blue-800 to-purple-900 hover:text-white text-gray-300"
                                 }`}
                         >
                             {link.name}
                         </button>
                     ))}
+
+                    {/* Divider */}
+                    <hr className="border-gray-700 my-2" />
+
+                    {/* Footer Links */}
+                    <div className="flex justify-around text-xs text-gray-400 px-4 pb-4">
+                        <button className="hover:text-white">Privacy</button>
+                        <button className="hover:text-white">Terms</button>
+                        <button className="hover:text-white">FAQ</button>
+                    </div>
                 </div>
             )}
+
         </nav>
     );
 }

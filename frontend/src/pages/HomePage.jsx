@@ -10,6 +10,8 @@ export default function HomePage({ likedItems, setLikedItems }) {
   const [activeCategory, setActiveCategory] = useState("All Products");
   const [searchTerm, setSearchTerm] = useState("");
   const [visibleCount, setVisibleCount] = useState(8); // show 2 rows initially
+  const [loadingSkeleton, setLoadingSkeleton] = useState(true);
+
 
   const navigate = useNavigate();
   const dashboardRef = useRef(null);
@@ -38,7 +40,10 @@ export default function HomePage({ likedItems, setLikedItems }) {
 
 
   useEffect(() => {
-    getProducts().then(setProducts);
+    getProducts().then((data) => {
+      setProducts(data);
+      setLoadingSkeleton(false);
+    });
   }, []);
 
   const categoryMap = {
@@ -77,6 +82,18 @@ export default function HomePage({ likedItems, setLikedItems }) {
           Price Tracker Dashboard
         </h2>
 
+        
+
+        {loadingSkeleton && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6  animate-pulse">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div
+                key={i}
+                className="h-[400px] bg-gray-800 rounded-xl shadow-inner"
+              />
+            ))}
+          </div>
+        )}
         {filteredProducts.length === 0 && (
           <p className="text-center text-gray-400 mt-10">
             No matching products found.
@@ -84,7 +101,9 @@ export default function HomePage({ likedItems, setLikedItems }) {
         )}
 
         {/* Responsive Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {!loadingSkeleton && (
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {filteredProducts.slice(0, visibleCount).map((product) => (
             <ProductCard
               key={product.id}
@@ -94,6 +113,8 @@ export default function HomePage({ likedItems, setLikedItems }) {
             />
           ))}
         </div>
+        )}
+        
 
         {visibleCount < filteredProducts.length && (
           <div className="mt-8 text-center">
