@@ -140,7 +140,7 @@ export default function CommunityPage() {
           className="w-full min-h-40 p-2 rounded bg-gray-900 text-gray-200 mb-2 outline-none resize-none"
           placeholder="What's on your mind?"
         />
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <div className="flex flex-row sm:flex-row justify-end md:justify-between items-center md:items-start sm:items-center gap-3">
           <select
             value={newTag}
             onChange={(e) => setNewTag(e.target.value)}
