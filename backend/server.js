@@ -8,6 +8,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import testRoutes from "./routes/test.js";
 
+import fetch from "node-fetch";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -76,4 +78,16 @@ app.use(express.json());
   app.listen(PORT, () => {
     console.log(`✅ Server running on port ${PORT}`);
   });
+
+  const SELF_URL = "https://tech-deal-backend.onrender.com";
+
+setInterval(async () => {
+  try {
+    const res = await fetch(SELF_URL);
+    console.log(`🔁 Keep-alive ping sent: ${res.status}`);
+  } catch (err) {
+    console.error("❌ Keep-alive ping failed:", err.message);
+  }
+}, 10 * 60 * 1000); // every 10 minutes
+
 })();
