@@ -8,7 +8,7 @@ export const payments = pgTable("payments", {
   amount: integer("amount").notNull(),
   currency: varchar("currency", { length: 10 }).notNull(),
   status: varchar("status", { length: 50 }).notNull(),
-  method: varchar("method", { length: 50 }).notNull(),
+  method: varchar("method", { length: 50 }),
   email: varchar("email", { length: 255 }),
   contact: varchar("contact", { length: 20 }),
   created_at: timestamp("created_at").notNull().defaultNow(),

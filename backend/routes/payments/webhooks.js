@@ -18,7 +18,7 @@ router.post(
   "/razorpay",
   bodyParser.json({
     verify: (req, res, buf) => {
-      req.rawBody = buf;
+      req.rawBody = buf.toString();
     },
   }), async (req, res) => {
     console.log("🔔 Webhook POST received");
@@ -65,7 +65,7 @@ console.log("🧪 rawBody length:", req.rawBody?.length);
         method: payment.method,
         email: payment.email || null,
         contact: payment.contact || null,
-        created_at: new Date(payment.created_at * 1000).toISOString(),
+        created_at: new Date(payment.created_at * 1000),
       });
 
       console.log(`✅ Payment captured: ${payment.id}`);
