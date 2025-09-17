@@ -9,7 +9,8 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 import { neon, neonConfig } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-serverless";
-import * as schema from "./schema/users.js";
+import * as schema from "./schema/index.js";
+
 import ws from "ws";
 
 neonConfig.webSocketConstructor = ws;
