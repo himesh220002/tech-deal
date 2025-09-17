@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+const BASE_URL = import.meta.env.VITE_BACKEND_URL ;
 
 export const createCoffeeOrder = async () => {
   const res = await axios.post(`${BASE_URL}/api/payments/razorpay/create-order`, {
