@@ -27,6 +27,11 @@ router.post(
   const signature = req.headers["x-razorpay-signature"];
   const body = req.rawBody;
 
+  if (!body) {
+      console.error("❌ Missing rawBody for HMAC verification");
+      return res.status(400).json({ error: "Missing raw body" });
+    }
+
   const expected = crypto.createHmac("sha256", secret).update(body).digest("hex");
 
   if (signature !== expected) {

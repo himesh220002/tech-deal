@@ -50,7 +50,7 @@ export default function ProductDetail({ product }) {
           <img
             src={product.image}
             alt={product.name}
-            className="rounded-xl shadow-lg w-full max-h-[350px] sm:max-h-[400px] xl:max-h-[500px] object-contain bg-black"
+            className="rounded-xl shadow-lg w-full max-h-[350px] sm:max-h-[400px] sm:min-w-[350px] xl:max-h-[500px] object-contain bg-black"
           />
           
         </div>
@@ -148,7 +148,7 @@ export default function ProductDetail({ product }) {
               </span>
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-2 lg:gap-10">
+            <div className="flex flex-col 2xl:flex-row gap-2 2xl:gap-10">
 
             {["student", "bank", "festive"].map((key) => (
               <div
