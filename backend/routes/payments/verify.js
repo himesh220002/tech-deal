@@ -2,6 +2,7 @@
 import express from "express";
 import { db } from "../../drizzle/db.js";
 import { payments } from "../../drizzle/schema/payment.js";
+import { desc } from "drizzle-orm";
 
 const router = express.Router();
 
@@ -12,7 +13,7 @@ router.get("/latest", async (req, res) => {
     const result = await db
       .select()
       .from(payments)
-      .orderBy(payments.created_at.desc())
+      .orderBy(desc(payments.created_at))
       .limit(1);
 
       if (result.length === 0) {
