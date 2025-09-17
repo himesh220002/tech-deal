@@ -28,7 +28,7 @@ router.post("/create-order", async (req, res) => {
     res.json({ order, amount: item.amount });
   } catch (err) {
     console.error("Razorpay order error:", err);
-    res.status(500).json({ error: "Order creation failed" });
+    res.status(500).json({ error: "Order creation failed", details:err });
   }
 });
 
