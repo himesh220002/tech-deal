@@ -1,21 +1,29 @@
-//src/pages/BuyCofeePage.jsx
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createCoffeeOrder } from "../api/payment";
 
 const BuycoffeePage = () => {
+  const [paymentInfo, setPaymentInfo] = useState(null);
+
   const handlePayment = async () => {
     try {
       const { order, amount } = await createCoffeeOrder();
 
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID, 
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: order.amount,
         currency: order.currency,
         name: "Tech Deals",
         description: "Digital Coffee",
         order_id: order.id,
-        handler: function (response) {
+        handler: async function (response) {
           alert("Payment initiated. Confirmation will follow.");
+
+          // Wait a few seconds for webhook to insert into DB
+          setTimeout(async () => {
+            const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/payments/verify/latest`);
+            const data = await res.json();
+            setPaymentInfo(data[0]); // assuming result is an array
+          }, 3000);
         },
         theme: { color: "#2563EB" },
         method: { upi: true, card: true, netbanking: false, wallet: false },
@@ -31,10 +39,9 @@ const BuycoffeePage = () => {
 
   useEffect(() => {
     const script = document.createElement("script");
-  script.src = "https://checkout.razorpay.com/v1/checkout.js";
-  script.async = true;
-  document.body.appendChild(script);
-     
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
   }, []);
 
   return (
@@ -47,6 +54,16 @@ const BuycoffeePage = () => {
       >
         Pay ₹99
       </button>
+
+      {paymentInfo && (
+        <div className="mt-8 p-4 border rounded bg-white shadow text-left w-full max-w-md">
+          <h2 className="text-xl font-semibold mb-2 text-green-600">🎉 Payment Successful!</h2>
+          <p><strong>Payment ID:</strong> {paymentInfo.payment_id}</p>
+          <p><strong>Order ID:</strong> {paymentInfo.order_id}</p>
+          <p><strong>Amount:</strong> ₹{paymentInfo.amount}</p>
+          <p className="mt-2 text-sm text-gray-600">Thanks for the coffee! You're fueling great code ☕🚀</p>
+        </div>
+      )}
     </div>
   );
 };

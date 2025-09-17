@@ -7,7 +7,14 @@ import { payments } from "../../drizzle/schema/payment.js";
 
 const router = express.Router();
 
+router.get("/razorpay", (req, res) => {
+  res.send("✅ Webhook route is live and listening for POST events");
+});
+
+
 router.post("/razorpay", express.json({ verify: rawBodySaver }), async (req, res) => {
+    console.log("🔔 Webhook POST received");
+
   const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
   const signature = req.headers["x-razorpay-signature"];
   const body = req.rawBody;
@@ -18,9 +25,13 @@ router.post("/razorpay", express.json({ verify: rawBodySaver }), async (req, res
     console.warn("❌ Invalid Razorpay webhook signature");
     return res.status(400).json({ error: "Invalid signature" });
   }
+  console.log("✅ Signature verified");
 
   const event = req.body.event;
   const payload = req.body.payload;
+
+   console.log("📦 Event:", event);
+  console.log("📦 Payload:", JSON.stringify(payload, null, 2));
 
   if (event === "payment.captured") {
     const payment = payload.payment.entity;

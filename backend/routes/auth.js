@@ -202,10 +202,6 @@ router.post("/update-likes", async (req, res) => {
     }
 });
 
-//razorpay webhook
-router.get("/razorpay", (req, res) => {
-  res.send("✅ Webhook route is live");
-});
 
 // Logout
 router.post("/logout", async (req, res) => {
