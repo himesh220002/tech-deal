@@ -47,12 +47,15 @@ console.log("🧪 rawBody length:", req.rawBody?.length);
   const payload = req.body.payload;
 
    console.log("📦 Event:", event);
-  console.log("📦 Payload:", JSON.stringify(payload, null, 2));
 
   if (event === "payment.captured") {
     const payment = payload.payment.entity;
 
+    const createdAt = new Date(payment.created_at * 1000).toISOString();
+      console.log(`🧾 Captured payment: ${payment.id} at ${createdAt}`);
+
     try {
+      
       await db.insert(payments).values({
         payment_id: payment.id,
         order_id: payment.order_id,
