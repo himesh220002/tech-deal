@@ -23,6 +23,9 @@ dotenv.config({ path: path.resolve(__dirname, ".env") });
 
 const app = express();
 app.use(cors());
+
+app.use("/api/webhooks", webhookRoutes);
+
 app.use(express.json());
 
 (async () => {
@@ -56,7 +59,7 @@ app.use(express.json());
   app.use("/api/test", testRoutes);
 
   app.use("/api/payments/razorpay", razorpayRoutes);
-  app.use("/api/webhooks", webhookRoutes);
+  
   app.use("/api/payments/verify", verifyRoutes);
 
   app.get("/", (req, res) => {
