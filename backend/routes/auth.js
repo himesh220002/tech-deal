@@ -134,7 +134,7 @@ router.get("/verify/:token", async (req, res) => {
         <body style="font-family: Arial; text-align: center; padding: 50px;">
           <h2 style="color: #10b981;">✅ Email verified successfully!</h2>
           <p>You can now login to your account.</p>
-          <a href="http://localhost:5173/login" style="background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Go to Login</a>
+          <a href="https://tech-deal-rho.vercel.app/login" style="background: #3b82f6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Go to Login</a>
         </body>
       </html>
     `);

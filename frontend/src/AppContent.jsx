@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
 import Compare from "./pages/Compare";
 import DealsPage from "./pages/DealsPage";
+import BuycoffeePage from "./pages/BuyCoffeePage";
 import CommunityPage from "./pages/CommunityPage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
@@ -47,6 +48,7 @@ export default function AppContent() {
         <Route path="/compare" element={<Compare />} />
         <Route path="/deals" element={<DealsPage />} />
         <Route path="/community" element={<CommunityPage />} />
+        <Route path="/coffee" element={<BuycoffeePage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/dashboard" element={<Dashboard />} />

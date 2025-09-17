@@ -88,6 +88,15 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
             </ul>
             {/* Icons + Hamburger */}
             <div className="flex gap-4 items-center">
+
+                <div className="relative group">
+                    <button 
+                    onClick={()=> navigate("/coffee")}
+                    >
+                        Coffee
+                    </button>
+                </div>
+
                 {/* Profile */}
                 {userEmail && (
                     <div className="relative group">

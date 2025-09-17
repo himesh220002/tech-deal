@@ -7,6 +7,11 @@ import { createClient } from "redis";
 import path from "path";
 import { fileURLToPath } from "url";
 import testRoutes from "./routes/test.js";
+import razorpayRoutes from "./routes/payments/razorpay.js";
+import webhookRoutes from "./routes/payments/webhooks.js";
+
+
+
 
 import fetch from "node-fetch";
 
@@ -49,6 +54,9 @@ app.use(express.json());
 
   // Other routes
   app.use("/api/test", testRoutes);
+
+  app.use("/api/payments/razorpay", razorpayRoutes);
+  app.use("/api/webhooks", webhookRoutes);
 
   app.get("/", (req, res) => {
     res.send("Backend is running 🚀");
