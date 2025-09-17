@@ -13,6 +13,8 @@ router.get("/latest", async (req, res) => {
       .orderBy(payments.created_at.desc())
       .limit(1);
 
+      console.log("✅ Latest payment fetched:", result);
+
     res.json(result);
   } catch (err) {
     console.error("❌ Failed to fetch latest payment:", err.message);

@@ -4,6 +4,8 @@ import express from "express";
 import crypto from "crypto";
 import { db } from "../../drizzle/db.js";
 import { payments } from "../../drizzle/schema/payment.js";
+import bodyParser from "body-parser";
+
 
 const router = express.Router();
 
@@ -12,7 +14,13 @@ router.get("/razorpay", (req, res) => {
 });
 
 
-router.post("/razorpay", express.json({ verify: rawBodySaver }), async (req, res) => {
+router.post(
+  "/razorpay",
+  bodyParser.json({
+    verify: (req, res, buf) => {
+      req.rawBody = buf;
+    },
+  }), async (req, res) => {
     console.log("🔔 Webhook POST received");
 
   const secret = process.env.RAZORPAY_WEBHOOK_SECRET;

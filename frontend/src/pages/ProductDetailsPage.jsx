@@ -44,13 +44,13 @@ export default function ProductDetail({ product }) {
       </div> */}
 
       {/* Grid layout */}
-      <div className="grid md:grid-cols-[2fr_3fr] gap-10 items-start mt-2 md:mt-10">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] xl:grid-cols-[2fr_3fr] gap-10 items-start mt-2 md:mt-10">
         {/* Image & Chart */}
-        <div className="flex flex-col items-center md:items-end gap-10 w-fit sm:w-full ">
+        <div className="flex flex-col items-center md:items-end gap-10 w-full sm:w-full ">
           <img
             src={product.image}
             alt={product.name}
-            className="rounded-xl shadow-lg w-full max-h-[500px] object-contain bg-black"
+            className="rounded-xl shadow-lg w-full max-h-[350px] sm:max-h-[400px] xl:max-h-[500px] object-contain bg-black"
           />
           
         </div>
@@ -148,7 +148,7 @@ export default function ProductDetail({ product }) {
               </span>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-2 md:gap-10">
+            <div className="flex flex-col lg:flex-row gap-2 lg:gap-10">
 
             {["student", "bank", "festive"].map((key) => (
               <div
