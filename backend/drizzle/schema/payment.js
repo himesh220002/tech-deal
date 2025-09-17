@@ -11,5 +11,5 @@ export const payments = pgTable("payments", {
   method: varchar("method", { length: 50 }).notNull(),
   email: varchar("email", { length: 255 }),
   contact: varchar("contact", { length: 20 }),
-  created_at: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+  created_at: timestamp("created_at").notNull().defaultNow(),
 });

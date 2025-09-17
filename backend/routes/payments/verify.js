@@ -7,6 +7,9 @@ const router = express.Router();
 
 router.get("/latest", async (req, res) => {
   try {
+    console.log("🧪 Column type:", typeof payments.created_at);
+console.log("🧪 Column object:", payments.created_at);
+
     const result = await db
       .select()
       .from(payments)
