@@ -2,7 +2,7 @@
 
 import express from "express";
 import crypto from "crypto";
-import { drizzle } from "../../drizzle/db.js";
+import { db } from "../../drizzle/db.js";
 import { payments } from "../../drizzle/schema/payment.js";
 
 const router = express.Router();
@@ -26,7 +26,7 @@ router.post("/razorpay", express.json({ verify: rawBodySaver }), async (req, res
     const payment = payload.payment.entity;
 
     try {
-      await drizzle.insert(payments).values({
+      await db.insert(payments).values({
         payment_id: payment.id,
         order_id: payment.order_id,
         amount: payment.amount / 100,

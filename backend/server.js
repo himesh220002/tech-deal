@@ -9,7 +9,7 @@ import { fileURLToPath } from "url";
 import testRoutes from "./routes/test.js";
 import razorpayRoutes from "./routes/payments/razorpay.js";
 import webhookRoutes from "./routes/payments/webhooks.js";
-
+import verifyRoutes from "./routes/payments/verify.js";
 
 
 
@@ -57,6 +57,7 @@ app.use(express.json());
 
   app.use("/api/payments/razorpay", razorpayRoutes);
   app.use("/api/webhooks", webhookRoutes);
+  app.use("/api/payments/verify", verifyRoutes);
 
   app.get("/", (req, res) => {
     res.send("Backend is running 🚀");
