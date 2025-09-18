@@ -51,20 +51,27 @@ console.log("🧪 rawBody length:", req.rawBody?.length);
   if (event === "payment.captured") {
     const payment = payload.payment.entity;
 
-    const createdAt = new Date(payment.created_at * 1000);
-      console.log(`🧾 Captured payment: ${payment.id} at ${createdAt}`);
+    
 
     try {
 
-      console.log("🧪 typeof created_at:", typeof new Date(payment.created_at * 1000));
+      const createdAt = new Date(payment.created_at * 1000);
 
+console.log("createdAt.toString():", createdAt.toString());
+console.log("createdAt.toISOString():", createdAt.toISOString());
+console.log("typeof createdAt:", typeof createdAt);           // "object"
+console.log("createdAt instanceof Date:", createdAt instanceof Date); // true
 
-      console.log("🧪 Insert payload:", {
+console.log("Insert payload (raw):", {
   payment_id: payment.id,
   order_id: payment.order_id,
-  created_at: new Date(payment.created_at * 1000),
+  created_at: createdAt,
 });
-
+console.log("Insert payload (json):", JSON.stringify({
+  payment_id: payment.id,
+  order_id: payment.order_id,
+  created_at: createdAt.toISOString(),
+}));
       
       await db.insert(payments).values({
         payment_id: payment.id,
@@ -72,7 +79,7 @@ console.log("🧪 rawBody length:", req.rawBody?.length);
         amount: payment.amount / 100,
         currency: payment.currency,
         status: payment.status,
-        method: payment.method,
+        method: payment.method || "unknown" ,
         email: payment.email || null,
         contact: payment.contact || null,
         created_at: new Date(payment.created_at * 1000),
