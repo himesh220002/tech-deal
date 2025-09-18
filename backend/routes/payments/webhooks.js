@@ -55,6 +55,13 @@ console.log("🧪 rawBody length:", req.rawBody?.length);
       console.log(`🧾 Captured payment: ${payment.id} at ${createdAt}`);
 
     try {
+
+      console.log("🧪 Insert payload:", {
+  payment_id: payment.id,
+  order_id: payment.order_id,
+  created_at: new Date(payment.created_at * 1000).toISOString(),
+});
+
       
       await db.insert(payments).values({
         payment_id: payment.id,
@@ -65,7 +72,7 @@ console.log("🧪 rawBody length:", req.rawBody?.length);
         method: payment.method,
         email: payment.email || null,
         contact: payment.contact || null,
-        created_at: new Date(payment.created_at * 1000),
+        created_at: new Date(payment.created_at * 1000).toISOString(),
       });
 
       console.log(`✅ Payment captured: ${payment.id}`);

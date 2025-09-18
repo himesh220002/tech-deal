@@ -21,6 +21,9 @@ router.get("/latest", async (req, res) => {
       return res.status(404).json({ error: "No payments found" });
     }
 
+    console.log("🧪 Query result length:", result.length);
+
+
       console.log("✅ Latest payment fetched:", result[0]);
 
     res.json(result[0]);
