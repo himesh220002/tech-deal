@@ -3,6 +3,7 @@ import { Zap, Bell, Heart, User, X, Menu } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { logout as logoutApi } from "../api/auth";
+import { GiCoffeeCup } from "react-icons/gi";
 import "./../styles/newstyle.css";
 
 export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
@@ -65,7 +66,7 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                 <div className="w-9 h-9 bg-gradient-to-r from-blue-600 via-indigo-700 to-purple-600 rounded-lg flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
                     <Zap className="w-5 h-5 text-white drop-shadow-md animate-pulse" />
                 </div>
-                <h1 className="text-xl sm:text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-400 tracking-wide">
+                <h1 className="text-xl hidden sm:block sm:text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-400 tracking-wide">
                     Tech Deal Radar
                 </h1>
             </div>
@@ -90,10 +91,12 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
             <div className="flex gap-4 items-center">
 
                 <div className="relative group">
+                    
                     <button 
+                    className=" flex gap-1 items-end cursor-pointer text-gray-200 py-1 px-2 rounded-md bg-gradient-to-r from-gray-900 to-purple-800 hover:bg-black"
                     onClick={()=> navigate("/coffee")}
                     >
-                        Coffee
+                        Buy<GiCoffeeCup className="w-7 h-7"/>
                     </button>
                 </div>
 

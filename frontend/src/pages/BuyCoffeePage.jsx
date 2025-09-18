@@ -29,7 +29,7 @@ const BuycoffeePage = () => {
                 `${import.meta.env.VITE_BACKEND_URL}/api/payments/verify/latest`
               );
               const data = await res.json();
-              setPaymentInfo(data[0] || data); // works if backend sends array or object
+              setPaymentInfo(data[0] || data); 
               setLoading(false);
             } catch (err) {
               console.error("Error fetching latest payment:", err);
