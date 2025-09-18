@@ -10,16 +10,13 @@ router.get("/latest", async (req, res) => {
   try {
     console.log("🔍 Fetching latest payment...");
 
-    const result = await db
-      .select()
-      .from(payments)
-      .limit(1);
-
-      if (result.length === 0) {
-      console.warn("⚠️ No payments found");
-      return res.status(404).json({ error: "No payments found" });
-    }
-
+    const result = await db.$client.query(`
+  SELECT * 
+  FROM payments
+  ORDER BY created_at DESC
+  LIMIT 1
+`);
+      console.log(result.rows[0]);
     console.log("🧪 Query result length:", result.length);
 
 
