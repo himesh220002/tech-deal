@@ -51,15 +51,18 @@ console.log("🧪 rawBody length:", req.rawBody?.length);
   if (event === "payment.captured") {
     const payment = payload.payment.entity;
 
-    const createdAt = new Date(payment.created_at * 1000).toISOString();
+    const createdAt = new Date(payment.created_at * 1000);
       console.log(`🧾 Captured payment: ${payment.id} at ${createdAt}`);
 
     try {
 
+      console.log("🧪 typeof created_at:", typeof new Date(payment.created_at * 1000));
+
+
       console.log("🧪 Insert payload:", {
   payment_id: payment.id,
   order_id: payment.order_id,
-  created_at: new Date(payment.created_at * 1000).toISOString(),
+  created_at: new Date(payment.created_at * 1000),
 });
 
       
@@ -72,7 +75,7 @@ console.log("🧪 rawBody length:", req.rawBody?.length);
         method: payment.method,
         email: payment.email || null,
         contact: payment.contact || null,
-        created_at: new Date(payment.created_at * 1000).toISOString(),
+        created_at: new Date(payment.created_at * 1000),
       });
 
       console.log(`✅ Payment captured: ${payment.id}`);
