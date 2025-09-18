@@ -63,7 +63,7 @@ router.post(
         method: payment.method || "unknown",
         email: payment.email || null,
         contact: payment.contact || null,
-        created_at: createdAt,
+        created_at: createdAt.toISOString(),
       };
 
       try {
