@@ -23,79 +23,88 @@ router.post(
   }), async (req, res) => {
     console.log("🔔 Webhook POST received");
 
-  const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
-  const signature = req.headers["x-razorpay-signature"];
-  const body = req.rawBody;
+    const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    const signature = req.headers["x-razorpay-signature"];
+    const body = req.rawBody;
 
-  console.log("🧪 rawBody type:", typeof req.rawBody);
-console.log("🧪 rawBody length:", req.rawBody?.length);
+    console.log("🧪 rawBody type:", typeof req.rawBody);
+    console.log("🧪 rawBody length:", req.rawBody?.length);
 
-  if (!body) {
+    if (!body) {
       console.error("❌ Missing rawBody for HMAC verification");
       return res.status(400).json({ error: "Missing raw body" });
     }
 
-  const expected = crypto.createHmac("sha256", secret).update(body).digest("hex");
+    const expected = crypto.createHmac("sha256", secret).update(body).digest("hex");
 
-  if (signature !== expected) {
-    console.warn("❌ Invalid Razorpay webhook signature");
-    return res.status(400).json({ error: "Invalid signature" });
-  }
-  console.log("✅ Signature verified");
-
-  const event = req.body.event;
-  const payload = req.body.payload;
-
-   console.log("📦 Event:", event);
-
-  if (event === "payment.captured") {
-    const payment = payload.payment.entity;
-
-    
-
-    try {
-
-      const createdAt = new Date(payment.created_at * 1000);
-
-console.log("createdAt.toString():", createdAt.toString());
-console.log("createdAt.toISOString():", createdAt.toISOString());
-console.log("typeof createdAt:", typeof createdAt);           // "object"
-console.log("createdAt instanceof Date:", createdAt instanceof Date); // true
-
-console.log("Insert payload (raw):", {
-  payment_id: payment.id,
-  order_id: payment.order_id,
-  created_at: createdAt,
-});
-console.log("Insert payload (json):", JSON.stringify({
-  payment_id: payment.id,
-  order_id: payment.order_id,
-  created_at: createdAt.toISOString(),
-}));
-      
-      await db.insert(payments).values({
-        payment_id: payment.id,
-        order_id: payment.order_id,
-        amount: payment.amount / 100,
-        currency: payment.currency,
-        status: payment.status,
-        method: payment.method || "unknown" ,
-        email: payment.email || null,
-        contact: payment.contact || null,
-        created_at: new Date(payment.created_at * 1000),
-      });
-
-      console.log(`✅ Payment captured: ${payment.id}`);
-      res.status(200).json({ success: true });
-    } catch (err) {
-      console.error("❌ DB insert failed:", err.message);
-      res.status(500).json({ error: "Database error" });
+    if (signature !== expected) {
+      console.warn("❌ Invalid Razorpay webhook signature");
+      return res.status(400).json({ error: "Invalid signature" });
     }
-  } else {
-    console.log(`ℹ️ Unhandled event: ${event}`);
-    res.status(200).json({ received: true });
-  }
-});
+    console.log("✅ Signature verified");
+
+    const event = req.body.event;
+    const payload = req.body.payload;
+
+    console.log("📦 Event:", event);
+
+    if (event === "payment.captured") {
+      const payment = payload.payment.entity;
+
+
+
+      try {
+
+        const createdAt = new Date(payment.created_at * 1000);
+
+        console.log("createdAt.toString():", createdAt.toString());
+        console.log("createdAt.toISOString():", createdAt.toISOString());
+        console.log("typeof createdAt:", typeof createdAt);           // "object"
+        console.log("createdAt instanceof Date:", createdAt instanceof Date); // true
+
+        console.log("Insert payload (raw):", {
+          payment_id: payment.id,
+          order_id: payment.order_id,
+          created_at: createdAt,
+        });
+        console.log("Insert payload (json):", JSON.stringify({
+          payment_id: payment.id,
+          order_id: payment.order_id,
+          created_at: createdAt.toISOString(),
+        }));
+
+        await db.insert(payments).values({
+          payment_id: payment.id,
+          order_id: payment.order_id,
+          amount: payment.amount / 100,
+          currency: payment.currency,
+          status: payment.status,
+          method: payment.method || "unknown",
+          email: payment.email || null,
+          contact: payment.contact || null,
+          created_at: new Date(payment.created_at * 1000),
+        }).onConflictDoUpdate({
+          target: payments.payment_id,
+          set: {
+            status: payment.status,
+            method: payment.method || "unknown",
+            email: payment.email || null,
+            contact: payment.contact || null,
+          },
+        });
+
+
+        console.log(`✅ Payment captured: ${payment.id}`);
+        res.status(200).json({ success: true });
+      } catch (err) {
+        console.error("❌ DB insert failed:", err.message);
+        res.status(500).json({ error: "Database error" });
+      }
+    } else {
+      console.log(`ℹ️ Unhandled event: ${event}`);
+      res.status(200).json({ received: true });
+    }
+  });
 
 // Middleware to preserve raw body for HMAC verification
 function rawBodySaver(req, res, buf) {
