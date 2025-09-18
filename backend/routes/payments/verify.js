@@ -13,7 +13,6 @@ router.get("/latest", async (req, res) => {
     const result = await db
       .select()
       .from(payments)
-      .orderBy(desc(payments.created_at))
       .limit(1);
 
       if (result.length === 0) {
