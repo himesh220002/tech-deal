@@ -39,6 +39,12 @@ const BuycoffeePage = () => {
         },
         theme: { color: "#2563EB" },
         method: { upi: true, card: true, netbanking: false, wallet: false },
+        modal: {
+        ondismiss: () => {
+          console.log("❌ Payment popup closed by user");
+          setLoading(false); // reset button when cancelled
+        },
+      },
       };
 
       const rzp = new window.Razorpay(options);
