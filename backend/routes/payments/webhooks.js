@@ -1,114 +1,95 @@
 // backend/routes/payments/webhooks.js
-
 import express from "express";
 import crypto from "crypto";
 import { db } from "../../drizzle/db.js";
 import { payments } from "../../drizzle/schema/payment.js";
 import bodyParser from "body-parser";
 
-
 const router = express.Router();
 
+// Simple GET to check webhook health
 router.get("/razorpay", (req, res) => {
   res.send("✅ Webhook route is live and listening for POST events");
 });
 
-
+// POST webhook
 router.post(
   "/razorpay",
   bodyParser.json({
     verify: (req, res, buf) => {
       req.rawBody = buf.toString();
     },
-  }), async (req, res) => {
+  }),
+  async (req, res) => {
     console.log("🔔 Webhook POST received");
 
     const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
     const signature = req.headers["x-razorpay-signature"];
     const body = req.rawBody;
 
-    console.log("🧪 rawBody type:", typeof req.rawBody);
-    console.log("🧪 rawBody length:", req.rawBody?.length);
-
     if (!body) {
       console.error("❌ Missing rawBody for HMAC verification");
       return res.status(400).json({ error: "Missing raw body" });
     }
 
-    const expected = crypto.createHmac("sha256", secret).update(body).digest("hex");
+    // Verify webhook signature
+    const expectedSignature = crypto
+      .createHmac("sha256", secret)
+      .update(body)
+      .digest("hex");
 
-    if (signature !== expected) {
+    if (signature !== expectedSignature) {
       console.warn("❌ Invalid Razorpay webhook signature");
       return res.status(400).json({ error: "Invalid signature" });
     }
     console.log("✅ Signature verified");
 
-    const event = req.body.event;
-    const payload = req.body.payload;
+    const { event, payload } = req.body;
 
-    console.log("📦 Event:", event);
+    console.log("📦 Event received:", event);
 
+    // Handle only payment captured events
     if (event === "payment.captured") {
       const payment = payload.payment.entity;
 
+      const createdAt = new Date(payment.created_at * 1000); // convert UNIX timestamp to JS Date
 
+      const insertData = {
+        payment_id: payment.id,
+        order_id: payment.order_id,
+        amount: Math.floor(payment.amount / 100), // convert paise to rupees
+        currency: payment.currency,
+        status: payment.status,
+        method: payment.method || "unknown",
+        email: payment.email || null,
+        contact: payment.contact || null,
+        created_at: createdAt,
+      };
 
       try {
+        await db.insert(payments)
+          .values(insertData)
+          .onConflictDoUpdate({
+            target: payments.payment_id, // update if payment_id exists
+            set: {
+              status: insertData.status,
+              method: insertData.method,
+              email: insertData.email,
+              contact: insertData.contact,
+            },
+          });
 
-        const createdAt = new Date(payment.created_at * 1000);
-
-        console.log("createdAt.toString():", createdAt.toString());
-        console.log("createdAt.toISOString():", createdAt.toISOString());
-        console.log("typeof createdAt:", typeof createdAt);           // "object"
-        console.log("createdAt instanceof Date:", createdAt instanceof Date); // true
-
-        console.log("Insert payload (raw):", {
-          payment_id: payment.id,
-          order_id: payment.order_id,
-          created_at: createdAt,
-        });
-        console.log("Insert payload (json):", JSON.stringify({
-          payment_id: payment.id,
-          order_id: payment.order_id,
-          created_at: createdAt.toISOString(),
-        }));
-
-        await db.insert(payments).values({
-          payment_id: payment.id,
-          order_id: payment.order_id,
-          amount: payment.amount / 100,
-          currency: payment.currency,
-          status: payment.status,
-          method: payment.method || "unknown",
-          email: payment.email || null,
-          contact: payment.contact || null,
-          created_at: new Date(payment.created_at * 1000),
-        }).onConflictDoUpdate({
-          target: payments.payment_id,
-          set: {
-            status: payment.status,
-            method: payment.method || "unknown",
-            email: payment.email || null,
-            contact: payment.contact || null,
-          },
-        });
-
-
-        console.log(`✅ Payment captured: ${payment.id}`);
-        res.status(200).json({ success: true });
+        console.log(`✅ Payment processed: ${payment.id}`);
+        return res.status(200).json({ success: true });
       } catch (err) {
-        console.error("❌ DB insert failed:", err.message);
-        res.status(500).json({ error: "Database error" });
+        console.error("❌ DB insert failed:", err);
+        return res.status(500).json({ error: "Database error" });
       }
     } else {
-      console.log(`ℹ️ Unhandled event: ${event}`);
-      res.status(200).json({ received: true });
+      console.log(`ℹ️ Unhandled event type: ${event}`);
+      return res.status(200).json({ received: true });
     }
-  });
-
-// Middleware to preserve raw body for HMAC verification
-function rawBodySaver(req, res, buf) {
-  req.rawBody = buf.toString();
-}
+  }
+);
 
 export default router;
