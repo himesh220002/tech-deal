@@ -2,7 +2,6 @@
 import express from "express";
 import crypto from "crypto";
 import { db } from "../../drizzle/db.js";
-import { payments } from "../../drizzle/schema/payment.js";
 import bodyParser from "body-parser";
 
 const router = express.Router();
@@ -52,32 +51,27 @@ router.post(
     if (event === "payment.captured") {
       const payment = payload.payment.entity;
 
-      const createdAt = new Date(payment.created_at * 1000); // convert UNIX timestamp to JS Date
-
-      const insertData = {
-        payment_id: payment.id,
-        order_id: payment.order_id,
-        amount: Math.floor(payment.amount / 100), // convert paise to rupees
-        currency: payment.currency,
-        status: payment.status,
-        method: payment.method || "unknown",
-        email: payment.email || null,
-        contact: payment.contact || null,
-        // created_at: createdAt.toISOString(),
-      };
+      const createdAt = new Date(payment.created_at * 1000); // UNIX timestamp → JS Date
 
       try {
-        await db.insert(payments)
-          .values(insertData)
-          .onConflictDoUpdate({
-            target: payments.payment_id, // update if payment_id exists
-            set: {
-              status: insertData.status,
-              method: insertData.method,
-              email: insertData.email,
-              contact: insertData.contact,
-            },
-          });
+        await db.$client.query(
+          `INSERT INTO payments 
+            (payment_id, order_id, amount, currency, status, method, email, contact, created_at) 
+           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+           ON CONFLICT (payment_id) 
+           DO UPDATE SET status=$5, method=$6, email=$7, contact=$8`,
+          [
+            payment.id,
+            payment.order_id,
+            Math.floor(payment.amount / 100),
+            payment.currency,
+            payment.status,
+            payment.method || "unknown",
+            payment.email || null,
+            payment.contact || null,
+            createdAt,
+          ]
+        );
 
         console.log(`✅ Payment processed: ${payment.id}`);
         return res.status(200).json({ success: true });
