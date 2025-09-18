@@ -96,7 +96,7 @@ export default function Navbar({ notificationCount = 0, likedCount = 0 }) {
                     className=" flex gap-1 items-end cursor-pointer text-gray-200 py-1 px-2 rounded-md bg-gradient-to-r from-gray-900 to-purple-800 hover:bg-black"
                     onClick={()=> navigate("/coffee")}
                     >
-                        Buy<GiCoffeeCup className="w-7 h-7"/>
+                        Buy<GiCoffeeCup className="w-7 h-7 text-yellow-100"/>
                     </button>
                 </div>
 
